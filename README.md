@@ -1,3 +1,16 @@
+## Where is the macOS Installer?
+
+For the impatient reader - you'll find it here:
+```
+_dist/QXmlEdit-0.9.18.dmg
+```
+
+Requirements are 
+
+- macOS >= 27.2
+- Apple Silicon >= M1
+
+I ported the whole thing from QT5 to QT6 with the awesome CLAUDE CLI. Some minor things are broken, for details see the QT6 Port section below.
 
 QXmlEdit
 --------
