@@ -22,8 +22,7 @@
 
 #include "xsdvalidationexecutor.h"
 #include "utils.h"
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
+#include "modules/xsd/xmlschemalibxml.h"
 #include "validatormessagehandler.h"
 #include "schemavalidator.h"
 
@@ -39,7 +38,7 @@ XSDValidationExecutor::~XSDValidationExecutor()
 
 QPair<int, QString> XSDValidationExecutor::execute(const QString &dataFile, const QString &schemaFile)
 {
-    QXmlSchema schemaHandler;
+    XmlSchema schemaHandler;
     ValidatorMessageHandler messageHandler;
     QUrl schemaUrl = QUrl::fromLocalFile(schemaFile);
     if(!schemaHandler.load(schemaUrl)) {
@@ -49,7 +48,7 @@ QPair<int, QString> XSDValidationExecutor::execute(const QString &dataFile, cons
         return QPair<int, QString>(-2, QObject::tr("Schema is invalid."));
     }
     schemaHandler.setMessageHandler(&messageHandler);
-    QXmlSchemaValidator schemaValidator(schemaHandler);
+    XmlSchemaValidator schemaValidator(schemaHandler);
     QUrl dataUrl = QUrl::fromLocalFile(dataFile);
     if(schemaValidator.validate(dataUrl)) {
         return QPair<int, QString>(0, QObject::tr("XML is valid."));

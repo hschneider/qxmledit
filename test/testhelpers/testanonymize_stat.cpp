@@ -1664,48 +1664,48 @@ bool TestAnonymize::testAnonStatChars()
 {
     _testName = "testAnonStatChars";
     for( int i = 0 ; i <= 0x007F; i++ ) {
-        if(AnonCharUtils::isWestern(i)) {
+        if(AnonCharUtils::isWestern(QChar(i))) {
             return error(QString("isWestern for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isEastEurope(i)) {
+        if(AnonCharUtils::isEastEurope(QChar(i))) {
             return error(QString("isEastEurope for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isCyrillic(i)) {
+        if(AnonCharUtils::isCyrillic(QChar(i))) {
             return error(QString("isCyrillic for:%1 %2").arg(QChar(i)).arg(i));
         }
     }
     for( int i = 0x80 ; i <= 0x00FF; i++ ) {
-        if(!AnonCharUtils::isWestern(i)) {
+        if(!AnonCharUtils::isWestern(QChar(i))) {
             return error(QString("isWestern for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isEastEurope(i)) {
+        if(AnonCharUtils::isEastEurope(QChar(i))) {
             return error(QString("isEastEurope for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isCyrillic(i)) {
+        if(AnonCharUtils::isCyrillic(QChar(i))) {
             return error(QString("isCyrillic for:%1 %2").arg(QChar(i)).arg(i));
         }
     }
     //--
     for( int i = 0x100 ; i <= 0x017F; i++ ) {
-        if(AnonCharUtils::isWestern(i)) {
+        if(AnonCharUtils::isWestern(QChar(i))) {
             return error(QString("isWestern for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(!AnonCharUtils::isEastEurope(i)) {
+        if(!AnonCharUtils::isEastEurope(QChar(i))) {
             return error(QString("isEastEurope for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isCyrillic(i)) {
+        if(AnonCharUtils::isCyrillic(QChar(i))) {
             return error(QString("isCyrillic for:%1 %2").arg(QChar(i)).arg(i));
         }
     }
     //--
     for( int i = 0x400 ; i <= 0x04FF; i++ ) {
-        if(AnonCharUtils::isWestern(i)) {
+        if(AnonCharUtils::isWestern(QChar(i))) {
             return error(QString("isWestern for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(AnonCharUtils::isEastEurope(i)) {
+        if(AnonCharUtils::isEastEurope(QChar(i))) {
             return error(QString("isEastEurope for:%1 %2").arg(QChar(i)).arg(i));
         }
-        if(!AnonCharUtils::isCyrillic(i)) {
+        if(!AnonCharUtils::isCyrillic(QChar(i))) {
             return error(QString("isCyrillic for:%1 %2").arg(QChar(i)).arg(i));
         }
     }

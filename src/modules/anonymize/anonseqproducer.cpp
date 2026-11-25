@@ -21,6 +21,7 @@
  **************************************************************************/
 
 #include "anonseqproducer.h"
+#include <QRandomGenerator>
 #include "modules/anonymize/algstat/anoncharutils.h"
 
 #ifdef  QXML_DEBUG
@@ -53,7 +54,7 @@ AnonSeqProducer::~AnonSeqProducer()
 int AnonSeqProducer::nextLetterPos()
 {
     const int ASCIIPos = 26;
-    const double fractionProbability = ((double)qrand()) / (double)RAND_MAX;
+    const double fractionProbability = ((double)int(QRandomGenerator::global()->bounded(RAND_MAX))) / (double)RAND_MAX;
     const int res = (int)(fractionProbability * (ASCIIPos));
     return res;
 }
@@ -88,17 +89,17 @@ QChar AnonSeqProducer::nextLetter(const bool uppercase, const ESeqType type)
         case AnonProducer::WESTERN:
             _letter++;
             if(uppercase) {
-                return 0x00C0;
+                return QChar(0x00C0);
             } else {
-                return 0x00E0;
+                return QChar(0x00E0);
             }
             break;
         case AnonProducer::EASTEUROPE:
             _letter++;
             if(uppercase) {
-                return 0x0160;
+                return QChar(0x0160);
             } else {
-                return 0x0161;
+                return QChar(0x0161);
             }
             break;
         default:
@@ -128,7 +129,7 @@ QChar AnonSeqProducer::nextLetter(const bool uppercase, const ESeqType type)
     }
     _letter++;
     DD(qDebug() << QString("  OUT: %1 ").arg(res));
-    return res ;
+    return QChar(res) ;
 }
 
 QChar AnonSeqProducer::nextDigit()
@@ -136,7 +137,7 @@ QChar AnonSeqProducer::nextDigit()
     int res = _digit % 10 ;
     _digit++;
     res += '0' ;
-    return res;
+    return QChar(res);
 }
 
 bool AnonSeqProducer::isError()

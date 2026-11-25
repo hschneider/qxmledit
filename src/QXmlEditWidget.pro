@@ -28,7 +28,7 @@ include("cconfig.pri")
 
 ############################ END INSTALLATION FOLDERS DECLARATION #############################################
 
-QT       += xml xmlpatterns network svg
+QT       += xml network svg core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4) {
   QT       += printsupport gui widgets core
@@ -46,13 +46,13 @@ equals(INST_AVOID_PRECOMP_HEADERS, "") {
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 win32 {
-	QT += winextras
     DEFINES += "_NO_W32_PSEUDO_MODIFIERS"
     DEFINES += "NOGDI"
 }
 }
 
 include(../src/coptions.pri)
+include(libxml.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += $$PWD/globals/includes
@@ -213,8 +213,9 @@ SOURCES += xmleditwidget.cpp \
     extraction/extractresults.cpp \
     modules/graph/nodessax.cpp \
     modules/graph/numtablewidgetitem.cpp \
-    modules/search/xqueryelementmodel.cpp \
     modules/search/searchxquery.cpp \
+    modules/xml/libxmlutils.cpp \
+    modules/xsd/xmlschemalibxml.cpp \
     modules/copyattr/copyattributesdialog.cpp \
     modules/copyattr/pasteattributesdialog.cpp \
     modules/uiutil/wchecker.cpp \
@@ -331,6 +332,7 @@ SOURCES += xmleditwidget.cpp \
     modules/namespace/nstableutils.cpp \
     modules/namespace/usernamespaceloader.cpp \
     modules/utils/base64utils.cpp \
+    modules/utils/codecdevice.cpp \
     modules/xsd/schemareferencesdialog.cpp \
     modules/namespace/namespacereferenceentry.cpp \
     modules/xml/insertxsdreference.cpp \
@@ -539,8 +541,9 @@ HEADERS += precompiled_lib.h \
     modules/graph/nodessax.h \
     modules/graph/numtablewidgetitem.h \
     modules/graph/tagzorder.h \
-    modules/search/xqueryelementmodel.h \
     modules/search/searchxquery.h \
+    modules/xml/libxmlutils.h \
+    modules/xsd/xmlschemalibxml.h \
     modules/copyattr/copyattributesdialog.h \
     modules/copyattr/pasteattributesdialog.h \
     modules/uiutil/wchecker.h \
@@ -639,6 +642,7 @@ HEADERS += precompiled_lib.h \
     modules/namespace/nstableutils.h \
     modules/namespace/usernamespaceloader.h \
     modules/utils/base64utils.h \
+    modules/utils/codecdevice.h \
     modules/namespace/namespaceresult.h \
     modules/xsd/schemareferencesdialog.h \
     modules/namespace/namespacereferenceentry.h \

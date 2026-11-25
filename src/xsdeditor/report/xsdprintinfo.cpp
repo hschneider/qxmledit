@@ -359,7 +359,7 @@ QRectF XSDPrintInfo::blockBoundingBox(QAbstractTextDocumentLayout *layout, QText
 void XSDPrintInfo::setupDocument(QTextDocument &document)
 {
     document.documentLayout()->setPaintDevice(painter->device());
-    document.setPageSize(printer->pageRect().size());
+    document.setPageSize(printer->pageRect(QPrinter::DevicePixel).size());
 }
 
 QSizeF XSDPrintInfo::documentSize(QTextDocument &document)

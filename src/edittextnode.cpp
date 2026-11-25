@@ -243,7 +243,7 @@ void EditTextNode::doSearch(const bool directionForward)
 bool EditTextNode::search(const QString &textToSearch, const bool caseSensitive, const bool isWordOnly, const bool directionForward)
 {
     setEnabled(false);
-    QTextDocument::FindFlags options = 0;
+    QTextDocument::FindFlags options;
     if(caseSensitive) {
         options |= QTextDocument::FindCaseSensitively ;
     }

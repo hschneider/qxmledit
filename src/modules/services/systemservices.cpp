@@ -52,7 +52,7 @@ QString SystemServices::storageDataLocation()
 {
     QString result ;
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-    result = QStandardPaths::writableLocation(QStandardPaths::DataLocation) ;
+    result = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) ;
 #else
     result = QDesktopServices::storageLocation(QDesktopServices::DataLocation) ;
 #endif

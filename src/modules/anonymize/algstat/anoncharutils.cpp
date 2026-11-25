@@ -21,6 +21,7 @@
  **************************************************************************/
 
 #include "anoncharutils.h"
+#include <QRandomGenerator>
 #include "utils.h"
 
 //----------------------------------------------
@@ -49,7 +50,7 @@ const int AnonCharUtils::CyrillicSize = 0x042F - 0x0410 ;
 
 __inline static bool checkRange(const QChar theChar, const int rangeMin, const int rangeMax)
 {
-    if((theChar >= rangeMin) && (theChar <= rangeMax)) {
+    if((theChar.unicode() >= rangeMin) && (theChar.unicode() <= rangeMax)) {
         return true ;
     }
     return false;
@@ -179,7 +180,7 @@ int AnonCharSet::getCharRange(const int count, const int letterBase, int letters
 {
     const int Weight = 2;
     const int ASCIIPos = Weight * 26;
-    const double fractionProbability = ((double)qrand()) / RandMax;
+    const double fractionProbability = ((double)int(QRandomGenerator::global()->bounded(RAND_MAX))) / RandMax;
     int index = (int)(fractionProbability * (ASCIIPos + count));
     if(index < ASCIIPos) {
         return letterBase + (index / Weight);

@@ -212,9 +212,9 @@ SessionSummary* Session::Private::getSummary(SessionOperationStatus &context)
             tempAccess.append(access);
         }
         // sort by date
-        qSort(tempAccess.begin(), tempAccess.end(), reverseCompareByDateFunction);
+        std::sort(tempAccess.begin(), tempAccess.end(), reverseCompareByDateFunction);
         // sort by count
-        qSort(tempFiles.begin(), tempFiles.end(), reverseCompareByCountFunction);
+        std::sort(tempFiles.begin(), tempFiles.end(), reverseCompareByCountFunction);
 
         int index = 0 ;
         index = 0 ;

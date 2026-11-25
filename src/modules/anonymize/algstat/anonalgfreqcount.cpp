@@ -21,6 +21,7 @@
  **************************************************************************/
 
 #include "anonalgfreqcount.h"
+#include <QRandomGenerator>
 
 //-----------------------------------
 AlgStatRandomProvider::AlgStatRandomProvider()
@@ -104,7 +105,7 @@ void AnonAlgFreqCount::prepare()
     double currentIntervalValue = 0 ;
     AnonAlgFreqTarget *lastTarget = NULL;
     QList<int> keys = _children.keys();
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
     foreach(const int key, keys) {
         AnonAlgFreqTarget *target = _children.value(key);
         if(_total != 0) {
@@ -124,7 +125,7 @@ void AnonAlgFreqCount::prepare()
 
 double AnonAlgFreqCount::chooseValue()
 {
-    const int value = qrand();
+    const int value = int(QRandomGenerator::global()->bounded(RAND_MAX));
     return ((double)value) / RAND_MAX;
 }
 
@@ -134,7 +135,7 @@ AnonAlgFreqTarget* AnonAlgFreqCount::randomChoice()
     double randomValue0To1 = _randomProvider->chooseValue();
     // find the nearest integer
     QList<int> keys = _children.keys();
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
     foreach(const int key, keys) {
         AnonAlgFreqTarget *target = _children.value(key);
         if(target->isInInterval0To1(randomValue0To1)) {

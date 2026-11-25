@@ -582,8 +582,8 @@ bool CompareModule::loadFile(FileInfo &fileInfoUI, const QString &filePath)
     QFileInfo regolaFileInfo(filePath);
     qint64 fileSize = regolaFileInfo.size();
     QDateTime dtLastMod = regolaFileInfo.lastModified();
-    QString dateMod = dtLastMod.toString(Qt::DefaultLocaleLongDate);
-    QString dateAccessed = regolaFileInfo.lastRead().toString(Qt::DefaultLocaleLongDate);
+    QString dateMod = QLocale().toString(dtLastMod, QLocale::LongFormat);
+    QString dateAccessed = QLocale().toString(regolaFileInfo.lastRead(), QLocale::LongFormat);
     QString toolTip = tr("%1\n  last accessed on %2\n  last updated on %3\n  size %4").arg(filePath).arg(dateAccessed).arg(dateMod).arg(Utils::getSizeForPresentation(fileSize));
     fileInfoUI.info->setToolTip(toolTip);
     fileInfoUI.info->setVisible(true);

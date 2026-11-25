@@ -101,7 +101,7 @@ void XSchemaInquiryContext::addError(XSchemaElement*element)
 
 QStringList XSchemaInquiryContext::typeErrors()
 {
-    return _typeErrors.toList();
+    return _typeErrors.values();
 }
 
 bool *XSchemaInquiryContext::enrollFlag() const

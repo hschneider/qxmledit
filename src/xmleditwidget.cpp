@@ -20,8 +20,6 @@
  * Boston, MA  02110-1301  USA                                            *
  **************************************************************************/
 
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
 #include "xmleditwidget.h"
 #include "ui_xmleditwidget.h"
 #include "xsdeditor/io/xschemaloader.h"

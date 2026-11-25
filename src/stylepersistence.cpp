@@ -168,7 +168,7 @@ bool StylePersistence::collectAKeyword(VStyle *style, QDomElement *element)
 
     TokenEntry *token = new TokenEntry(keyword, NULL);
     if(NULL != token) {
-        mapTokens.insertMulti(idStyle, token);
+        mapTokens.insert(idStyle, token);
         if(style->addToken(token)) {
             return true ;
         }

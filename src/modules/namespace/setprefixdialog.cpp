@@ -64,7 +64,7 @@ void SetPrefixDialog::finishSetup()
         _selWidget->setSelectionType(TargetSelection::SelectedItemAndChildren);
     }
 
-    Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.allPrefixes.toList());
+    Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.allPrefixes.values());
 }
 
 

@@ -77,7 +77,7 @@ void SetNamespaceDialog::mergePrefixesInfo()
         set.unite(values);
     }
     set.unite(_prefixesCited);
-    Utils::updateEditableCombo(ui->prefix, set.toList());
+    Utils::updateEditableCombo(ui->prefix, set.values());
 }
 
 void SetNamespaceDialog::mergeNamespacesInfo()
@@ -85,7 +85,7 @@ void SetNamespaceDialog::mergeNamespacesInfo()
     QSet<QString> set;
     set.unite(_info->namespacesInfo.allNamespaces);
     set.unite(_prefixesCited);
-    Utils::updateEditableCombo(ui->namespaces, set.toList());
+    Utils::updateEditableCombo(ui->namespaces, set.values());
 }
 
 void SetNamespaceDialog::on_select_clicked()

@@ -34,13 +34,13 @@ TestConfigColors::~TestConfigColors()
 void TestConfigColors::exportTo(QIODevice *device)
 {
     QTextStream textStream(device);
-    textStream.setCodec("UTF-8");
+    textStream.setEncoding(QStringConverter::Utf8);
     writeExport(textStream);
 }
 
 void TestConfigColors::importFrom(QIODevice *device)
 {
     QTextStream textStream(device);
-    textStream.setCodec("UTF-8");
+    textStream.setEncoding(QStringConverter::Utf8);
     import(textStream);
 }

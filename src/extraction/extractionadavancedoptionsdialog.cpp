@@ -42,7 +42,7 @@ ExtractionAdavancedOptionsDialog::~ExtractionAdavancedOptionsDialog()
 QSet<QString> ExtractionAdavancedOptionsDialog::setOfScripts()
 {
     QStringList idList = _operation->filtersId().split(",");
-    return idList.toSet();
+    return QSet<QString>(idList.begin(), idList.end());
 }
 
 void ExtractionAdavancedOptionsDialog::setup()

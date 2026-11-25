@@ -537,7 +537,7 @@ bool TestSearch::xquerySearchAttributesExact()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchAttributesExact", helper);
-    helper.initFind("//*[@data eq 'wwww']");
+    helper.initFind("//*[@data = 'wwww']");
     helper.search();
     QStringList expected;
     expected << "h1" << "h2" << "h3";
@@ -548,7 +548,7 @@ bool TestSearch::xquerySearchAttributesNotExact()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchAttributesExact", helper);
-    helper.initFind("//*[contains(@data, 'www') eq true()]");
+    helper.initFind("//*[contains(@data, 'www') = true()]");
     helper.search();
     QStringList expected;
     expected << "h1" << "h2" << "h3" << "h4" << "h5";
@@ -559,7 +559,7 @@ bool TestSearch::xquerySearchAttributeNameExact()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchAttributesExact", helper);
-    helper.initFind("//*/@*[name() eq 'att1']");
+    helper.initFind("//*/@*[name() = 'att1']");
     helper.search();
     QStringList expected;
     expected << "child1" << "child2" << "child2" ;
@@ -626,7 +626,7 @@ bool TestSearch::xquerySearchText()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchText", helper);
-    helper.initFind("//*[ text() eq 'aaaa' ]");
+    helper.initFind("//*[ text() = 'aaaa' ]");
     helper.search();
     QStringList expected;
     expected << "b" << "child" ;
@@ -648,7 +648,7 @@ bool TestSearch::xquerySearchAttributesExactInChildren()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchAttributesExactInChildren", helper);
-    helper.initFind("//*[@data eq 'www']");
+    helper.initFind("//*[@data = 'www']");
     QList<int> selList;
     selList.append(0); //root
     selList.append(0); //h1
@@ -671,7 +671,7 @@ bool TestSearch::xquerySearchAttributesNotExactInChildren()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchAttributesNotExactInChildren", helper);
-    helper.initFind("//*[contains(@data, 'www') eq true()]");
+    helper.initFind("//*[contains(@data, 'www') = true()]");
     QList<int> selList;
     selList.append(0); //root
     selList.append(0); //h1
@@ -756,7 +756,7 @@ bool TestSearch::xquerySearchTextInChildren()
 {
     TestSearchHelper helper(true);
     testAStdSearchWithParamsInit("xquerySearchTextInChildren", helper);
-    helper.initFind("//*[ text() eq 'kjjz' ]");
+    helper.initFind("//*[ text() = 'kjjz' ]");
     QList<int> selList;
     selList.append(0); //root
     selList.append(20); //rpr1
@@ -796,32 +796,32 @@ bool TestSearch::xquerySearchNamespacesTemplate(const QString &testName, const Q
 
 bool TestSearch::testxquerySearchNamespacesNoNS()
 {
-    return xquerySearchNamespacesTemplate("xquerySearchNamespaces", FILE_SEARCH_NONS, "//dd[ @dd eq 'xdd2' ]", "dd");
+    return xquerySearchNamespacesTemplate("xquerySearchNamespaces", FILE_SEARCH_NONS, "//dd[ @dd = 'xdd2' ]", "dd");
 }
 
 bool TestSearch::testxquerySearchDefaultNamespace()
 {
-    return xquerySearchNamespacesTemplate("testxquerySearchDefaultNamespace", FILE_SEARCH_DEFAULTNS, "//dd[ @dd eq 'xdd2' ]", "dd");
+    return xquerySearchNamespacesTemplate("testxquerySearchDefaultNamespace", FILE_SEARCH_DEFAULTNS, "//dd[ @dd = 'xdd2' ]", "dd");
 }
 
 bool TestSearch::testxquerySearchOneNamespace()
 {
-    return xquerySearchNamespacesTemplate("testxquerySearchOneNamespace", FILE_SEARCH_ONENS, "//x:dd[ @dd eq 'xdd2' ]", "x:dd");
+    return xquerySearchNamespacesTemplate("testxquerySearchOneNamespace", FILE_SEARCH_ONENS, "//x:dd[ @dd = 'xdd2' ]", "x:dd");
 }
 
 bool TestSearch::testxquerySearchDefaultAndOtherNamespace()
 {
-    return xquerySearchNamespacesTemplate("testxquerySearchDefaultAndOtherNamespace", FILE_SEARCH_ONEANDDEFAULTNS, "//x:dd[ @dd eq 'xdd2' ]", "x:dd");
+    return xquerySearchNamespacesTemplate("testxquerySearchDefaultAndOtherNamespace", FILE_SEARCH_ONEANDDEFAULTNS, "//x:dd[ @dd = 'xdd2' ]", "x:dd");
 }
 
 bool TestSearch::testxquerySearchMultiplesNamespace()
 {
-    return xquerySearchNamespacesTemplate("testxquerySearchMultiplesNamespace", FILE_SEARCH_MULTIPLE, "//y:dd[ @dd eq 'xdd2' ]", "y:dd");
+    return xquerySearchNamespacesTemplate("testxquerySearchMultiplesNamespace", FILE_SEARCH_MULTIPLE, "//y:dd[ @dd = 'xdd2' ]", "y:dd");
 }
 
 bool TestSearch::testxquerySearchDefaultAndMultiplesNamespace()
 {
-    return xquerySearchNamespacesTemplate("testxquerySearchDefaultAndMultiplesNamespace", FILE_SEARCH_MULTIPLE_AND_DEFAULT, "//y:dd[ @dd eq 'xdd2' ]", "y:dd");
+    return xquerySearchNamespacesTemplate("testxquerySearchDefaultAndMultiplesNamespace", FILE_SEARCH_MULTIPLE_AND_DEFAULT, "//y:dd[ @dd = 'xdd2' ]", "y:dd");
 }
 
 bool TestSearch::xquerySearchNamespaces()
@@ -865,37 +865,37 @@ bool TestSearch::xquerySearchNamespacesTemplateString(const QString &testName, c
 
 bool TestSearch::testxquerySearchNamespacesNoNSString()
 {
-    const QString expected = "declare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("xquerySearchNamespacesString", FILE_SEARCH_NONS, "//*", expected);
 }
 
 bool TestSearch::testxquerySearchDefaultNamespaceString()
 {
-    const QString expected = "declare default element namespace \"nsx\";\ndeclare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("testxquerySearchDefaultNamespaceString", FILE_SEARCH_DEFAULTNS, "//*", expected);
 }
 
 bool TestSearch::testxquerySearchOneNamespaceString()
 {
-    const QString expected = "declare namespace x = \"nsx\";\ndeclare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("testxquerySearchOneNamespaceString", FILE_SEARCH_ONENS, "//*", expected);
 }
 
 bool TestSearch::testxquerySearchDefaultAndOtherNamespaceString()
 {
-    const QString expected = "declare default element namespace \"xyz\";\ndeclare namespace x = \"nsx\";\ndeclare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("testxquerySearchDefaultAndOtherNamespaceString", FILE_SEARCH_ONEANDDEFAULTNS, "//*", expected);
 }
 
 bool TestSearch::testxquerySearchMultiplesNamespaceString()
 {
-    const QString expected = "declare namespace x = \"nsx\";\ndeclare namespace y = \"xyz\";\ndeclare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("testxquerySearchMultiplesNamespaceString", FILE_SEARCH_MULTIPLE, "//*", expected);
 }
 
 bool TestSearch::testxquerySearchDefaultAndMultiplesNamespaceString()
 {
-    const QString expected = "declare default element namespace \"rtu\";\ndeclare namespace x = \"nsx\";\ndeclare namespace y = \"xyz\";\ndeclare variable $root external;\n$root//*";
+    const QString expected = "//*";
     return xquerySearchNamespacesTemplateString("testxquerySearchDefaultAndMultiplesNamespaceString", FILE_SEARCH_MULTIPLE_AND_DEFAULT, "//*", expected);
 }
 
@@ -1071,19 +1071,19 @@ bool TestSearch::testXQuerySearch()
 bool TestSearch::xqueryVerifyAdjustTextToSearch()
 {
     _subTestName = "xqueryVerifyAdjustTextToSearch";
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("//*[@data eq 'www']", false, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("./*[@data eq 'www']", false, 1));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("/*[@data eq 'www']", false, 1));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(".//*[@data eq 'www']", false, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data eq 'www']", false, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data eq 'www'] ", false, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("//*[@data = 'www']", false, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("./*[@data = 'www']", false, 1));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("/*[@data = 'www']", false, 1));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(".//*[@data = 'www']", false, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data = 'www']", false, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data = 'www'] ", false, 2));
     //--
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("//*[@data eq 'www']", true, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("./*[@data eq 'www']", true, 0));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("/*[@data eq 'www']", true, 0));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(".//*[@data eq 'www']", true, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data eq 'www']", true, 2));
-    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data eq 'www'] ", true, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("//*[@data = 'www']", true, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("./*[@data = 'www']", true, 0));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch("/*[@data = 'www']", true, 0));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(".//*[@data = 'www']", true, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data = 'www']", true, 2));
+    TEST_OR_DIE(innerXqueryVerifyAdjustTextToSearch(" .//*[@data = 'www'] ", true, 2));
     return true;
 }
 

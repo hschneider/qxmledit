@@ -86,13 +86,14 @@
 #endif
 
 #include <QXmlStreamReader>
+#include <QTextCodec>
+#include <QTextEncoder>
+#include <QTextDecoder>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
 #include <QtGui>
 #include <QClipboard>
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
 
 //------------------------
 

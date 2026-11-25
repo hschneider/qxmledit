@@ -236,7 +236,7 @@ void TestBase::insertItems(QSet<QString> *items, ... )
 
 QString TestBase::dumpStringSet(QSet<QString> &set, const QString &name)
 {
-    QStringList lst = set.toList();
+    QStringList lst = set.values();
     QString ret = QString("%1: %2 items >>'%3'<<").arg(name).arg(set.count()).arg(lst.join(","));
     return ret ;
 }
@@ -457,10 +457,9 @@ bool TestBase::loadFileAsString(const QString &fileInput, const QString &encodin
 bool TestBase::loadIOAsString(QIODevice *device, const QString &encoding, QString *result)
 {
     if( device->open(QIODevice::ReadOnly)) {
-        QTextStream stream(device);
         QTextCodec *codec = QTextCodec::codecForName(encoding.toLatin1().data());
-        stream.setCodec(codec);
-        *result = stream.readAll();
+        const QByteArray data = device->readAll();
+        *result = (NULL != codec) ? codec->toUnicode(data) : QString::fromUtf8(data);
         device->close();
         return true;
     }
@@ -552,9 +551,9 @@ Element * TestBase::makeElement(const QString &tag, const QString &attr)
 QHash<QString, QString> TestBase::unpackAttrib(const QString &attribs)
 {
     QHash<QString, QString> decoded ;
-    QStringList pairs = attribs.split(",", QString::SkipEmptyParts);
+    QStringList pairs = attribs.split(",", Qt::SkipEmptyParts);
     foreach( QString pair, pairs ) {
-        QStringList attr = pair.split("=", QString::KeepEmptyParts);
+        QStringList attr = pair.split("=", Qt::KeepEmptyParts);
         decoded.insert(attr.at(0), attr.at(1));
     }
     return decoded;

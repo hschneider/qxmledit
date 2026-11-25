@@ -40,12 +40,12 @@
 
   <test test="el-ref-for-attributegroups">
         <el-ref-for-attributegroups attr2xs="xs:int" item1ag1="item1ag1d |item1|item2|item1ag1d" attr2a="xs:int" ag2a1="item1"
-        ag3a1="item1" attr10="item10-1|item11-1" attr11="item11 |item11|item12" attrtype1="xs:string" ag2a1="item1"/>
+        ag3a1="item1" attr10="item10-1|item11-1" attr11="item11 |item11|item12" attrtype1="xs:string"/>
   </test>
 
   <test test="el-type-for-attributegroup">
         <el-type-for-attributegroup attr2p="xs:int" item1ag1="item1ag1d |item1|item2|item1ag1d" attr2a="xs:int" ag2a1="item1"
-        ag3a1="item1" attr10="item10-1|item11-1" attr11="item11 |item11|item12" attrtype1="xs:string" ag2a1="item1"/>
+        ag3a1="item1" attr10="item10-1|item11-1" attr11="item11 |item11|item12" attrtype1="xs:string"/>
   </test>
 
 </root>

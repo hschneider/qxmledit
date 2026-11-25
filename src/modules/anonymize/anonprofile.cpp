@@ -233,7 +233,7 @@ QString AnonProfile::toXMLSerializedString()
     saveToDom(domDocument);
     QString result;
     QTextStream streamOut(&result);
-    streamOut.setCodec("UTF-8");
+    streamOut.setEncoding(QStringConverter::Utf8);
     streamOut << domDocument.toString(1);
     streamOut.flush();
     return result ;

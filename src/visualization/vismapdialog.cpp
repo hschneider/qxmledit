@@ -194,7 +194,7 @@ void VisMapDialog::loadFile(const QString &fileName)
         QFutureWatcher<void> loadWatcher;
         connect(&progressDialogLoad, SIGNAL(canceled()), &loadWatcher, SLOT(cancel()));
         connect(&loadWatcher, SIGNAL(finished()), &progressDialogLoad, SLOT(reset()));
-        QFuture<void> future = QtConcurrent::run(this, &VisMapDialog::loadFileWorkerMethod, &handler, fileName);
+        QFuture<void> future = QtConcurrent::run(&VisMapDialog::loadFileWorkerMethod, this, &handler, fileName);
         loadWatcher.setFuture(future);
         progressDialogLoad.exec();
         disconnect(&progressDialogLoad, SIGNAL(canceled()), &loadWatcher, SLOT(cancel()));

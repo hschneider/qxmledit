@@ -71,7 +71,7 @@ void AttributeProfileMgmtDialog::loadData()
     _profiles = newProfiles ;
     foreach(AttrFilterProfile * profile, _profiles) {
         QListWidgetItem *newItem = new QListWidgetItem(QString(tr("%1 - %2")).arg(profile->name()).arg(profile->description()));
-        newItem->setData(Qt::UserRole, qVariantFromValue((void*)profile));
+        newItem->setData(Qt::UserRole, QVariant::fromValue((void*)profile));
         ui->profilesList->addItem(newItem);
     }
 }

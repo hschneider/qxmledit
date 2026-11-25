@@ -53,7 +53,7 @@ AnonAlgFreqTarget* AnonStatAlgValue::newChild()
 bool AnonStatAlgValue::scan(AnonAlgStatContext &context, const QString &input)
 {
     DD(qDebug() << QString("  scan input=%1").arg(input));
-    const QStringList tokens = input.split(_splitRegExp, QString::SkipEmptyParts);
+    const QStringList tokens = _splitRegExp.splitString(input, Qt::SkipEmptyParts);
     AnonStatAlgWordChain* chain = chainForWords(tokens.size());
     if(NULL == chain) {
         return context.setError(QObject::tr("Unable to scan a value"), QObject::tr("New chain failed for %1").arg(tokens.size()));

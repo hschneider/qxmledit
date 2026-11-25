@@ -160,7 +160,7 @@ void ConfigureEditorColors::updateEntry(QTreeWidgetItem *item)
     if(NULL != item) {
         ColorEntry *entry = entryOfItem(item);
         if(NULL != entry) {
-            item->setTextColor(1, entry->color());
+            item->setForeground(1, entry->color());
             item->setData(0, Qt::DecorationRole, entry->color());
         }
     }
@@ -178,7 +178,7 @@ void ConfigureEditorColors::loadList()
         QTreeWidgetItem *item = new QTreeWidgetItem();
         item->setText(0, translateKey(entry->key()));
         item->setText(1, translateKey(entry->key()));
-        item->setData(0, Qt::UserRole, qVariantFromValue((void*)entry));
+        item->setData(0, Qt::UserRole, QVariant::fromValue((void*)entry));
         updateEntry(item);
         ui->treeColors->addTopLevelItem(item);
     }
@@ -240,7 +240,7 @@ void ConfigureEditorColors::on_cmdExport_clicked()
         QFile file(filePath);
         if(file.open(QIODevice::WriteOnly)) {
             QTextStream textStream(&file);
-            textStream.setCodec("UTF-8");
+            textStream.setEncoding(QStringConverter::Utf8);
             writeExport(textStream);
             file.flush();
             if(file.error() != QFile::NoError) {
@@ -265,7 +265,7 @@ void ConfigureEditorColors::on_cmdImport_clicked()
         QFile file(filePath);
         if(file.open(QIODevice::ReadOnly)) {
             QTextStream textStream(&file);
-            textStream.setCodec("UTF-8");
+            textStream.setEncoding(QStringConverter::Utf8);
             import(textStream);
             if(file.error() != QFile::NoError) {
                 Utils::error(this, tr("Error importing data"));

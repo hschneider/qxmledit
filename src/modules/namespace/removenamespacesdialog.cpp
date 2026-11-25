@@ -80,19 +80,19 @@ void RemoveNamespacesDialog::updateSelection()
         ui->namespaces->clear();
         break;
     case TargetSelection::AllItems:
-        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.allNamespaces.toList());
+        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.allNamespaces.values());
         break;
     case TargetSelection::SelectedItem:
-        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.selectionNamespaces.toList());
+        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.selectionNamespaces.values());
         break;
     case TargetSelection::SelectedItemAndChildren:
-        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.selectionNamespacesRecursive.toList());
+        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.selectionNamespacesRecursive.values());
         break;
     case TargetSelection::Bookmarks:
-        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.bookmarksNamespaces.toList());
+        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.bookmarksNamespaces.values());
         break;
     case TargetSelection::BookmarksAndChildren:
-        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.bookmarksNamespacesRecursive.toList());
+        Utils::updateNonEditableCombo(ui->namespaces, _info->namespacesInfo.bookmarksNamespacesRecursive.values());
         break;
     }
 }
@@ -137,7 +137,7 @@ void RemoveNamespacesDialog::updatePrefixes()
     QString prefixes;
     if(_info->namespacesInfo.prefixesForNamespaces.contains(_info->removedNamespace)) {
         QSet<QString> prefixesL = _info->namespacesInfo.prefixesForNamespaces[_info->removedNamespace];
-        QList<QString> prefixesList = prefixesL.toList();
+        QList<QString> prefixesList = prefixesL.values();
         bool first = true ;
         foreach(const QString & str, prefixesList) {
             if(!first) {

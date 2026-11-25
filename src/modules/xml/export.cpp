@@ -37,7 +37,7 @@ bool Regola::writeAsJavaString(QIODevice * device)
     }
 
     QString result = document.toString(4);
-    QStringList resList = result.split(QRegExp("\\r?\\n"));
+    QStringList resList = QRegExp("\\r?\\n").splitString(result);
     if(resList.size() > 0) {
         if(resList.last() == "") {
             resList.removeLast();
@@ -45,7 +45,7 @@ bool Regola::writeAsJavaString(QIODevice * device)
     }
 
     QTextStream streamOut(device);
-    streamOut.setCodec("UTF-8");
+    streamOut.setEncoding(QStringConverter::Utf8);
     streamOut << " a = \"\"" ;
     int index = -1 ;
     const int lastIndex = resList.size() - 1;
@@ -58,7 +58,7 @@ bool Regola::writeAsJavaString(QIODevice * device)
         for(int i = 0 ; i < len ; i++) {
             QChar ch = str.at(i);
             ushort unicodeCode = ch.unicode();
-            if(ch > 127) {
+            if(ch.unicode() > 127) {
                 streamOut << "&#x";
                 QString value ;
                 value.setNum(unicodeCode, 16);
@@ -111,7 +111,7 @@ bool Regola::writeAsCString(QIODevice * device)
     }
 
     QString result = document.toString(4);
-    QStringList resList = result.split(QRegExp("\\r?\\n"));
+    QStringList resList = QRegExp("\\r?\\n").splitString(result);
     if(resList.size() > 0) {
         if(resList.last() == "") {
             resList.removeLast();
@@ -119,7 +119,7 @@ bool Regola::writeAsCString(QIODevice * device)
     }
 
     QTextStream streamOut(device);
-    streamOut.setCodec("UTF-8");
+    streamOut.setEncoding(QStringConverter::Utf8);
     streamOut << "#define XML_SOURCE \"\\" ;
     int index = -1 ;
     const int lastIndex = resList.size() - 1;
@@ -132,7 +132,7 @@ bool Regola::writeAsCString(QIODevice * device)
         for(int i = 0 ; i < len ; i++) {
             QChar ch = str.at(i);
             ushort unicodeCode = ch.unicode();
-            if(ch > 127) {
+            if(ch.unicode() > 127) {
                 streamOut << "&#x";
                 QString value ;
                 value.setNum(unicodeCode, 16);

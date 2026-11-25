@@ -207,8 +207,8 @@ bool TestIndent::saveAndCompare(const QString &caseId, const int appIndentation,
     compareBuffer.open(QIODevice::WriteOnly);
     XMLSaveContext context;
     QTextStream stream(&compareBuffer);
-    stream.setCodec(QTextCodec::codecForName("UTF-8"));
-    context.setCodec(stream.codec());
+    stream.setEncoding(QStringConverter::Utf8);
+    context.setCodec(QTextCodec::codecForName("UTF-8"));
     compareBuffer.setTextModeEnabled(context.canUseTextMode());
     stream << compare ;
     stream.flush();

@@ -121,7 +121,7 @@ void BinaryViewerDialog::assignFile(const QString &filePath)
     QFileInfo fileInfo(filePath);
     qint64 fileSize = fileInfo.size();
     QDateTime dtLastMod = fileInfo.lastModified();
-    QString dateMod = dtLastMod.toString(Qt::DefaultLocaleLongDate);
+    QString dateMod = QLocale().toString(dtLastMod, QLocale::LongFormat);
     // update labels
     ui->lblFileSize->setText(tr("%1 bytes").arg(fileSize));
     ui->lblFileUpdatedOn->setText(dateMod);

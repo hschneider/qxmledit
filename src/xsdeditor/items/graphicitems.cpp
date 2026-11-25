@@ -176,7 +176,7 @@ void GraphicsRoundRectItem::drawShadow(QPainter *painter, QRectF &bounds)
         bounds.setHeight(bounds.height() - 2);
         bounds.setWidth(bounds.width() - 2);
     }
-    painter->drawRoundRect(bounds, 25, 25);
+    painter->drawRoundedRect(bounds, 25, 25, Qt::RelativeSize);
 }
 
 void GraphicsRoundRectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget */*widget*/)
@@ -228,7 +228,7 @@ void GraphicsRoundRectItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         painter->setPen(pen);
     }
 
-    painter->drawRoundRect(bounds, 10, 10);
+    painter->drawRoundedRect(bounds, 10, 10, Qt::RelativeSize);
 }
 
 bool GraphicsRoundRectItem::isComplexGradient() const

@@ -75,7 +75,7 @@ void EditNamespaceDialog::loadData()
 {
     ui->name->setText(_ns->name());
     ui->description->setText(_ns->description());
-    QStringList tags = QStringList::fromSet(_ns->data()->tags());
+    QStringList tags = _ns->data()->tags().values();
     ui->tags->setText(tags.join(","));
     ui->defaultPrefix->setText(_ns->preferredPrefix());
     ui->uri->setText(_ns->uri());

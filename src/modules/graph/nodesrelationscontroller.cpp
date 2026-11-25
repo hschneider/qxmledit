@@ -21,6 +21,7 @@
  **************************************************************************/
 
 #include <stdio.h>
+#include <QRandomGenerator>
 #include <math.h>
 #include "nodesrelationscontroller.h"
 #include "tagnodes.h"
@@ -29,7 +30,7 @@
 #include "utils.h"
 #include "numtablewidgetitem.h"
 #include <QLinearGradient>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QApplication>
 #include <QTextStream>
 #include <QTextBrowser>
@@ -71,8 +72,7 @@ NodesRelationsController::NodesRelationsController(NodesRelationsDialog *newDial
     // side of the window
 
     {
-        QDesktopWidget * desktop = QApplication::desktop();
-        QRect rect = desktop->screenGeometry(-1);
+        QRect rect = QGuiApplication::primaryScreen()->geometry();
         sideX = qMax(rect.width(), 1);
         sideY = qMax(rect.height(), 1);
     }
@@ -406,8 +406,8 @@ void NodesRelationsController::handleForces()
             df -= src->position;
             df.normalize();
             if((df.x() == 0) && (df.y() == 0)) {
-                float fx = ((float)qrand() / (float)RAND_MAX) * 10. - 5;
-                float fy = ((float)qrand() / (float)RAND_MAX) * 10. - 5;
+                float fx = ((float)int(QRandomGenerator::global()->bounded(RAND_MAX)) / (float)RAND_MAX) * 10. - 5;
+                float fy = ((float)int(QRandomGenerator::global()->bounded(RAND_MAX)) / (float)RAND_MAX) * 10. - 5;
                 df.setX(fx);
                 df.setY(fy);
             }
@@ -508,8 +508,8 @@ void NodesRelationsController::setupNode(TagNode *nd)
     TagMarker *marker = new TagMarker(nd, this);
     markers.append(marker);
     //-------------------------------------------------------------
-    int x = (sideX - 1) * ((float)qrand() / (float)RAND_MAX) ;
-    int y = (sideY - 1) * ((float)qrand() / (float)RAND_MAX) ;
+    int x = (sideX - 1) * ((float)int(QRandomGenerator::global()->bounded(RAND_MAX)) / (float)RAND_MAX) ;
+    int y = (sideY - 1) * ((float)int(QRandomGenerator::global()->bounded(RAND_MAX)) / (float)RAND_MAX) ;
     marker ->position.setX(x);
     marker ->position.setY(y);
     marker ->originalPosition = marker->position;

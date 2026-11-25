@@ -40,7 +40,7 @@ void AnimationUtility::setupSizeForLabelIcon(QLabel *label, QPropertyAnimation *
     if(!label->hasScaledContents()) {
         label->setScaledContents(true);
     }
-    const QSizeF size(label->pixmap()->width(), label->pixmap()->height());
+    const QSizeF size(label->pixmap().width(), label->pixmap().height());
     animation->setTargetObject(label);
     animation->setPropertyName("size");
     animation->setEasingCurve(QEasingCurve::InOutSine);

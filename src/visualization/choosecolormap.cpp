@@ -40,7 +40,7 @@ ChooseColorMap::ChooseColorMap(QList<ColorMap *>&colorMaps, QWidget *parent) :
     foreach(ColorMap * map, colorMaps) {
         QListWidgetItem *item = new QListWidgetItem("");
         if(NULL != item) {
-            item->setData(Qt::UserRole, qVariantFromValue((void*)map));
+            item->setData(Qt::UserRole, QVariant::fromValue((void*)map));
             item->setText(map->name());
             ui->mapList->addItem(item);
             if(isFirst) {

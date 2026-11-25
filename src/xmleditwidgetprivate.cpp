@@ -23,8 +23,6 @@
 #include "xmlEdit.h"
 #include "xmleditwidgetprivate.h"
 
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
 #include <QFileInfo>
 #include <QShortcut>
 #include "xmleditwidget.h"
@@ -200,7 +198,7 @@ void XmlEditWidgetPrivate::secondStepConstructor()
     // ALT SHIFT INS
     {
         QShortcut *shortcutAppendSpec = new QShortcut(tree);
-        shortcutAppendSpec->setKey(Qt::Key_Insert + Qt::ALT + Qt::SHIFT);
+        shortcutAppendSpec->setKey(QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Insert));
         connect(shortcutAppendSpec, SIGNAL(activated()), this, SLOT(onShortcutAppendSpec()));
     }
     //-------------------------------------

@@ -43,7 +43,7 @@ void NsTableUtils::insNsItem(QTableWidget *table, const int row, const int colum
 {
     QTableWidgetItem *item = new QTableWidgetItem(text);
     item->setFlags(item->flags() & ~(Qt::ItemIsEditable | Qt::ItemIsUserCheckable));
-    item->setData(Qt::UserRole, qVariantFromValue(data));
+    item->setData(Qt::UserRole, QVariant::fromValue(data));
     item->setToolTip(tooltip.isEmpty() ? text : tooltip);
     table->setItem(row, column, item);
 }

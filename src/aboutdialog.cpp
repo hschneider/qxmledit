@@ -124,7 +124,7 @@ void AboutDialog::setupPaths()
 void AboutDialog::addPath(const QString &label, const QString &value, const QFont &fontLabel)
 {
     //const QBrush &brightTextBrush(palette().());
-    const QBrush &backgroundBrush(palette().background());
+    const QBrush &backgroundBrush(palette().window());
     QTableWidgetItem *itemLabel = new QTableWidgetItem(label + ":");
     itemLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     itemLabel->setFont(fontLabel);

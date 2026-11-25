@@ -72,7 +72,7 @@ QString LicenseDialog::readLicense(const QString & filePath)
     if(file.open(QIODevice::ReadOnly)) {
         QTextStream streamIn(&file);
         streamIn.setAutoDetectUnicode(false);
-        streamIn.setCodec("utf-8");
+        streamIn.setEncoding(QStringConverter::Utf8);
         result = streamIn.readAll();
         if(file.error() != QFile::NoError) {
             result = "" ;

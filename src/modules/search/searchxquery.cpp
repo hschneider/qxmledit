@@ -21,46 +21,158 @@
  **************************************************************************/
 
 #include "modules/search/searchxquery.h"
-#include "modules/search/xqueryelementmodel.h"
+#include "modules/xml/libxmlutils.h"
 #include "utils.h"
 #include "regola.h"
 #include "findtextparams.h"
-#include <QSourceLocation>
-#include <QXmlResultItems>
-#include <QXmlFormatter>
+#include "xmlutils.h"
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+
+namespace {
+
+const xmlChar *xc(const QByteArray &data)
+{
+    return reinterpret_cast<const xmlChar*>(data.constData());
+}
+
+// Copies the Element tree into a libxml2 document. Each node keeps the source Element in _private.
+// Unprefixed elements are in no namespace, so unprefixed XPath steps match them
+// (as the former XQuery "declare default element namespace" did).
+class LibXmlTreeBuilder
+{
+    xmlDocPtr _doc;
+    QMap<QString, QString> _namespaces;
+    QMap<QString, xmlNsPtr> _nsByPrefix;
+public:
+    xmlNodePtr rootMatch;
+    Element *rootToMatch;
+
+    LibXmlTreeBuilder(const QMap<QString, QString> &namespaces, Element *newRootToMatch) :
+        _doc(NULL), _namespaces(namespaces), rootMatch(NULL), rootToMatch(newRootToMatch)
+    {
+        _doc = xmlNewDoc(BAD_CAST "1.0");
+    }
+
+    ~LibXmlTreeBuilder()
+    {
+        xmlFreeDoc(_doc);
+    }
+
+    xmlDocPtr doc()
+    {
+        return _doc;
+    }
+
+    void build(Element *root)
+    {
+        if(NULL == root) {
+            return;
+        }
+        xmlNodePtr node = makeNode(root);
+        if(NULL != node) {
+            xmlDocSetRootElement(_doc, node);
+            foreach(const QString &prefix, _namespaces.keys()) {
+                if(!prefix.isEmpty()) {
+                    _nsByPrefix[prefix] = xmlNewNs(node, xc(_namespaces[prefix].toUtf8()), xc(prefix.toUtf8()));
+                }
+            }
+            fill(root, node);
+        }
+    }
+
+private:
+    xmlNodePtr makeNode(Element *element)
+    {
+        xmlNodePtr node = NULL;
+        switch(element->getType()) {
+        case Element::ET_ELEMENT:
+            node = xmlNewDocNode(_doc, NULL, xc(element->tag().toUtf8()), NULL);
+            break;
+        case Element::ET_TEXT:
+            node = xmlNewDocText(_doc, xc(element->text.toUtf8()));
+            break;
+        case Element::ET_COMMENT:
+            node = xmlNewDocComment(_doc, xc(element->getComment().toUtf8()));
+            break;
+        case Element::ET_PROCESSING_INSTRUCTION:
+            node = xmlNewDocPI(_doc, xc(element->getPITarget().toUtf8()), xc(element->getPIData().toUtf8()));
+            break;
+        default:
+            break;
+        }
+        if(NULL != node) {
+            node->_private = element;
+            if(element == rootToMatch) {
+                rootMatch = node;
+            }
+        }
+        return node;
+    }
+
+    void fill(Element *element, xmlNodePtr node)
+    {
+        if(element->getType() != Element::ET_ELEMENT) {
+            return ;
+        }
+        QString prefix, localName;
+        XmlUtils::decodeQualifiedName(element->tag(), prefix, localName);
+        if(!prefix.isEmpty() && _nsByPrefix.contains(prefix)) {
+            xmlNodeSetName(node, xc(localName.toUtf8()));
+            xmlSetNs(node, _nsByPrefix[prefix]);
+        }
+        foreach(Attribute *attribute, element->attributes) {
+            xmlNewProp(node, xc(attribute->name.toUtf8()), xc(attribute->value.toUtf8()));
+        }
+        foreach(TextChunk *chunk, element->getTextChunks()) {
+            xmlNodePtr text = xmlNewDocText(_doc, xc(chunk->text.toUtf8()));
+            text->_private = element;
+            xmlAddChild(node, text);
+        }
+        foreach(Element *child, *element->getChildItems()) {
+            xmlNodePtr childNode = makeNode(child);
+            if(NULL != childNode) {
+                xmlAddChild(node, childNode);
+                fill(child, childNode);
+            }
+        }
+    }
+};
+
+Element *nodeToElement(xmlNodePtr node)
+{
+    if(NULL == node) {
+        return NULL;
+    }
+    switch(node->type) {
+    case XML_ATTRIBUTE_NODE:
+        return (NULL != node->parent) ? static_cast<Element*>(node->parent->_private) : NULL;
+    case XML_ELEMENT_NODE:
+    case XML_TEXT_NODE:
+    case XML_COMMENT_NODE:
+    case XML_PI_NODE:
+        return static_cast<Element*>(node->_private);
+    default:
+        return NULL;
+    }
+}
+
+}
 
 SearchXQuery::SearchXQuery(QObject *parent) :
-    QAbstractMessageHandler(parent), _query(_namePool)
+    QObject(parent)
 {
-    _query.setMessageHandler(this);
 }
 
 SearchXQuery::~SearchXQuery()
 {
 }
 
-QString SearchXQuery::composeQueryString(Regola *regola, FindTextParams &searchInfo)
+QString SearchXQuery::composeQueryString(Regola * /*regola*/, FindTextParams &searchInfo)
 {
-    QMap<QString, QString> nss = regola->namespaces();
-    QString queryString ;
-
-    foreach(QString ns, nss.keys()) {
-        if(ns.isEmpty()) {
-            queryString += QString("declare default element namespace \"%1\";\n").arg(nss[ns]);
-        }
-    }
-
-    foreach(QString ns, nss.keys()) {
-        if(!ns.isEmpty()) {
-            queryString += QString("declare namespace %1 = \"%2\";\n").arg(ns).arg(nss[ns]);
-        }
-    }
     const QString textToFind = getTextToFind(searchInfo);
-    const QString textToFindAdjusted = adjustTextToFind(textToFind);
-
-    queryString += QString("declare variable $root external;\n$root%1").arg(textToFindAdjusted);
-
-    return queryString ;
+    return adjustTextToFind(textToFind);
 }
 
 QString SearchXQuery::adjustTextToFind(const QString &textToFind)
@@ -78,21 +190,37 @@ QString SearchXQuery::getTextToFind(FindTextParams &searchInfo)
 
 void SearchXQuery::search(Regola *regola, Element *element, FindTextParams &searchInfo)
 {
-    QXmlResultItems result;
     Element *rootElement = element;
     if(!searchInfo.isLookOnlyChildren()) {
         rootElement = NULL ;
     }
-    XQueryElementModel model(regola, rootElement, _namePool);
-    QXmlItem rootItem = model.root(QXmlNodeModelIndex());
-    _query.bindVariable("root", rootItem);
+    const QMap<QString, QString> namespaces = regola->namespaces();
+    LibXmlErrors errors;
+    LibXmlTreeBuilder builder(namespaces, rootElement);
+    builder.build(regola->root());
 
     QString queryString = composeQueryString(regola, searchInfo);
-
-    //Utils::message(queryString);
-    _query.setQuery(queryString);
-    if(!_query.isValid()) {
-        Utils::error(tr("The syntax of the XPath expression is not valid."));
+    xmlXPathContextPtr context = xmlXPathNewContext(builder.doc());
+    if(NULL == context) {
+        Utils::error(tr("Internal error."));
+        return ;
+    }
+    foreach(const QString &prefix, namespaces.keys()) {
+        if(!prefix.isEmpty()) {
+            xmlXPathRegisterNs(context, xc(prefix.toUtf8()), xc(namespaces[prefix].toUtf8()));
+        }
+    }
+    context->node = reinterpret_cast<xmlNodePtr>(builder.doc());
+    if((NULL != rootElement) && (NULL != builder.rootMatch)) {
+        // the search is relative to the selected element
+        context->node = builder.rootMatch;
+        queryString = "." + queryString;
+    }
+    xmlXPathObjectPtr result = xmlXPathEvalExpression(xc(queryString.toUtf8()), context);
+    if(NULL == result) {
+        xmlXPathFreeContext(context);
+        QString detail = errors.firstError().text;
+        Utils::error(tr("The syntax of the XPath expression is not valid.") + (detail.isEmpty() ? QString() : "\n" + detail));
         return ;
     }
 
@@ -108,72 +236,35 @@ void SearchXQuery::search(Regola *regola, Element *element, FindTextParams &sear
         }
     }
 
-    _query.evaluateTo(&result);
-    QXmlItem item(result.next());
-    while(!item.isNull()) {
-        if(item.isNode()) {
-            QXmlNodeModelIndex index = item.toNodeModelIndex();
-            Element *element = model.indexToElement(index);
-            if(NULL != element) {
-                D(printf(">>'%s'\n", element->tag().toLatin1().data());)
-                D(fflush(stdout);)
-                searchInfo.newOccurence(element->selfInfo.totalSize + element->childrenInfo.totalSize);
-                if(!searchInfo.isCountingOnly()) {
-                    searchInfo.addSelection(element);
-                    element->hilite();
-                    if(searchInfo.isSelToBookmarks()) {
-                        regola->addBookmark(element);
-                    }
+    const int count = ((XPATH_NODESET == result->type) && (NULL != result->nodesetval)) ? result->nodesetval->nodeNr : 0 ;
+    for(int i = 0 ; i < count ; i++) {
+        Element *element = nodeToElement(result->nodesetval->nodeTab[i]);
+        if(NULL != element) {
+            D(printf(">>'%s'\n", element->tag().toLatin1().data());)
+            D(fflush(stdout);)
+            searchInfo.newOccurence(element->selfInfo.totalSize + element->childrenInfo.totalSize);
+            if(!searchInfo.isCountingOnly()) {
+                searchInfo.addSelection(element);
+                element->hilite();
+                if(searchInfo.isSelToBookmarks()) {
+                    regola->addBookmark(element);
                 }
-                // Recurse up tp the root.
-                if(!searchInfo.isCountingOnly()) {
-                    QTreeWidgetItem * ui = element->getUI();
-                    if(isCloseUnrelated && (NULL != ui)) {
-                        ui = ui->parent();
-                        while(NULL != ui) {
-                            if(!ui->isExpanded()) {
-                                ui->setExpanded(true);
-                            }
-                            ui = ui->parent();
+            }
+            // Recurse up tp the root.
+            if(!searchInfo.isCountingOnly()) {
+                QTreeWidgetItem * ui = element->getUI();
+                if(isCloseUnrelated && (NULL != ui)) {
+                    ui = ui->parent();
+                    while(NULL != ui) {
+                        if(!ui->isExpanded()) {
+                            ui->setExpanded(true);
                         }
+                        ui = ui->parent();
                     }
                 }
             }
         }
-        item = result.next();
     }
-}
-
-
-
-void SearchXQuery::searchAndDisplay(Regola *regola, const QString expression)
-{
-    XQueryElementModel model(regola, NULL, _namePool);
-    QXmlItem rootItem = model.root(QXmlNodeModelIndex());
-    _query.bindVariable("root", rootItem);
-    QMap<QString, QString> nss = regola->namespaces();
-    QString queryString = QString("($root)%1").arg(expression);
-    foreach(QString ns, nss.keys()) {
-        queryString = QString("declare namespace %1 = \"%2\";%3").arg(ns).arg(nss[ns]).arg(queryString);
-    }
-    _query.setQuery(queryString);
-
-    Q_ASSERT(_query.isValid());
-    QByteArray output;
-    QBuffer buffer(&output);
-    buffer.open(QIODevice::WriteOnly);
-    QXmlFormatter serializer(_query, &buffer);
-    _query.evaluateTo(&serializer);
-    buffer.close();
-    QString s = QString::fromUtf8(output.constData());
-    printf("%s\n", s.toLatin1().data());
-    fflush(stdout);
-    Utils::message(s);
-}
-
-void SearchXQuery::handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const QSourceLocation & sourceLocation)
-{
-    if((QtCriticalMsg == type) || (QtFatalMsg == type) || (QtSystemMsg == type)) {
-        Utils::error(QString("%1: location: %2-%3 %4").arg(description).arg(sourceLocation.line()).arg(sourceLocation.column()).arg(identifier.toString()));
-    }
+    xmlXPathFreeObject(result);
+    xmlXPathFreeContext(context);
 }

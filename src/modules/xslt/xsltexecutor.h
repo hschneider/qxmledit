@@ -26,27 +26,24 @@
 #include "xmlEdit.h"
 #include "applicationdata.h"
 #include "operationresult.h"
-#include <QAbstractMessageHandler>
 #include <QBuffer>
 #include <QTemporaryFile>
 
 class XmlEditWidget;
-class QXmlQuery;
 
 class XSLTExecutor
 {
 protected:
-    class MessageHandler : public QAbstractMessageHandler
+    class MessageHandler
     {
         QMutex _mutex;
     public:
         MessagesOperationResult &_result;
         MessageHandler(MessagesOperationResult &result);
         ~MessageHandler();
-        virtual void handleMessage(QtMsgType type,
+        void handleMessage(QtMsgType type,
                                    const QString &description,
-                                   const QUrl &identifier,
-                                   const QSourceLocation &sourceLocation);
+                                   const qint64 line, const qint64 column);
     };
 
     class InputHolder
@@ -99,7 +96,7 @@ protected:
 
         virtual bool openForWrite() = 0;
         virtual bool close() = 0;
-        virtual bool evaluateTo(QXmlQuery &query) = 0;
+        virtual bool writeResult(const QByteArray &data, const QString &encoding) = 0;
         virtual bool isFile() ;
         virtual QString fileName() ;
         virtual bool createTempFilePath();
@@ -117,7 +114,7 @@ protected:
 
         virtual bool openForWrite();
         virtual bool close() ;
-        virtual bool evaluateTo(QXmlQuery &query);
+        virtual bool writeResult(const QByteArray &data, const QString &encoding);
         virtual bool isFile() ;
         virtual QString fileName() ;
     };
@@ -136,7 +133,7 @@ protected:
 
         virtual bool openForWrite() ;
         virtual bool close() ;
-        virtual bool evaluateTo(QXmlQuery &query);
+        virtual bool writeResult(const QByteArray &data, const QString &encoding);
         virtual bool createTempFilePath();
         virtual bool removeTempFile();
         virtual bool readResult();

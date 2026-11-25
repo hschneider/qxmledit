@@ -180,7 +180,7 @@ QString TestSelectXsd::dumpLoadInfoMap(QHash<QString, XSchemaObject*> *loadInfoM
     char ptrBuffer[bufSize];
 
     ::snprintf(ptrBuffer, bufSize, "%p", loadInfoMap);
-    result += QString("Map %2: size of load map:%1\n").arg(loadInfoMap->size()).arg(ptrBuffer);
+    result += QString("Map %2: size of load map:%1\n").arg(loadInfoMap->size()).arg(QString::fromLatin1(ptrBuffer));
     int index = 0 ;
     foreach( QString key, loadInfoMap->keys()) {
         XSchemaObject *e = loadInfoMap->value(key);

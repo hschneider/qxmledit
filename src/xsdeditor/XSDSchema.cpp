@@ -718,7 +718,7 @@ XSDSchema *XSDSchema::redefinedSchemaByObject(XSchemaRedefine *redefineObject)
 void XSDSchema::processImport(XSchemaImport * importObject, XSDSchema * importedSchema)
 {
     _importedSchemas.append(importedSchema);
-    _importedSchemasByNamespace.insertMulti(importObject->targetNamespace(), importedSchema);
+    _importedSchemasByNamespace.insert(importObject->targetNamespace(), importedSchema);
     _importedSchemasByObject.insert(importObject, importedSchema);
 }
 

@@ -20,26 +20,24 @@
  * Boston, MA  02110-1301  USA                                            *
  **************************************************************************/
 
-
 #ifndef SEARCHXQUERY_H
 #define SEARCHXQUERY_H
 
 #include <QObject>
-#include <QXmlQuery>
-#include <QAbstractMessageHandler>
+#include <QMap>
 
 #include "libQXmlEdit_global.h"
 class Regola;
 class FindTextParams;
 class Element;
 
-class LIBQXMLEDITSHARED_EXPORT SearchXQuery : public QAbstractMessageHandler
+/**
+ * XPath 1.0 search (libxml2) on a copy of the Regola element tree.
+ */
+class LIBQXMLEDITSHARED_EXPORT SearchXQuery : public QObject
 {
     Q_OBJECT
-    QXmlNamePool _namePool;
-    QXmlQuery   _query;
 
-    void searchAndDisplay(Regola *regola, const QString expression);
     QString composeQueryString(Regola *regola, FindTextParams &searchInfo);
 
     static QString adjustTextToFind(const QString &textToFind);
@@ -49,8 +47,6 @@ public:
     virtual ~SearchXQuery();
 
     void search(Regola *regola, Element *element, FindTextParams &search);
-
-    virtual void handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const QSourceLocation & sourceLocation);
 
 #ifdef QXMLEDIT_TEST
     friend class TestSearch;

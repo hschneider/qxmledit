@@ -23,7 +23,7 @@ void ChooseXSDViewRootItemDialog::setupData(QList<XSchemaElement*> elements)
     ui->list->setSelectionMode(QAbstractItemView::SingleSelection);
     foreach(XSchemaElement* element, elements) {
         QListWidgetItem * item = new QListWidgetItem(element->name());
-        item->setData(Qt::UserRole, qVariantFromValue((void*)element));
+        item->setData(Qt::UserRole, QVariant::fromValue((void*)element));
         ui->list->addItem(item);
     }
 }

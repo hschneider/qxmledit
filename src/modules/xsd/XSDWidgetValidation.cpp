@@ -22,8 +22,7 @@
 
 #include "xmleditwidgetprivate.h"
 
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
+#include "modules/xsd/xmlschemalibxml.h"
 #include <QFileInfo>
 #include "xmleditwidget.h"
 #include "xsdeditor/io/xschemaloader.h"
@@ -77,7 +76,7 @@ bool XmlEditWidgetPrivate::validateWithFile(const QString &schemaUrl)
     if(NULL == regola) {
         return false ;
     }
-    QXmlSchema schemaHandler;
+    XmlSchema schemaHandler;
     ValidatorMessageHandler messageHandler;
     if(!schemaUrl.isEmpty()) {
         QFile schemaFile(schemaUrl);
@@ -102,7 +101,7 @@ bool XmlEditWidgetPrivate::validateWithFile(const QString &schemaUrl)
     }
     QByteArray dataXml = regola->getAsText().toUtf8();
     schemaHandler.setMessageHandler(&messageHandler);
-    QXmlSchemaValidator schemaValidator(schemaHandler);
+    XmlSchemaValidator schemaValidator(schemaHandler);
     bool result = false;
     if(schemaValidator.validate(dataXml)) {
         Utils::message(p, tr("XML is valid."));
@@ -141,7 +140,7 @@ bool XmlEditWidgetPrivate::validateAsXSD(OperationResult &result)
         Utils::error(p, tr("No data to validate XSD."));
         return false ;
     }
-    QXmlSchema schemaHandler;
+    XmlSchema schemaHandler;
     ValidatorMessageHandler messageHandler;
     schemaHandler.setMessageHandler(&messageHandler);
     QString textRepresentation = regola->getAsText();

@@ -79,14 +79,16 @@ void XMLSaveContext::setCodec(QTextCodec *theCodec)
     _canUseTextMode = false;
     QTextEncoder *encoder = theCodec->makeEncoder();
     /*QByteArray discardBOMIfAny = */encoder->fromUnicode(" ");
-    _spaceBytes = encoder->fromUnicode(" ");
-    _bytesPerChar = _spaceBytes.length();
-    _crBytes = encoder->fromUnicode("\n");
-    if(!isMultiByte()) {
+    const bool isCodecMultiByte = encoder->fromUnicode(" ").length() > 1 ;
+    // The writer device is a CodecDevice: what is written to it is UTF-8, it encodes to the codec.
+    _spaceBytes = " ";
+    _bytesPerChar = 1;
+    _crBytes = "\n";
+    if(!isCodecMultiByte) {
         QBuffer buffer;
         buffer.open(QIODevice::ReadWrite | QIODevice::Text);
         QTextStream stream(&buffer);
-        stream.setCodec(QTextCodec::codecForName("UTF-8"));
+        stream.setEncoding(QStringConverter::Utf8);
         stream.setAutoDetectUnicode(false);
         stream << "\n" ;
         stream.flush();

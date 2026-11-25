@@ -24,26 +24,29 @@
 #define VALIDATORMESSAGEHANDLER_H
 
 #include <QString>
+#include <QUrl>
 
-#ifndef USE_QT_44
-
-#include <QAbstractMessageHandler>
-#include <QSourceLocation>
-
-class ValidatorMessageHandler : public QAbstractMessageHandler
+// Holds the first error reported by a validation (libxml2 based).
+class ValidatorMessageHandler
 {
 private:
+    bool _hasMessage;
     QtMsgType _type;
     QString _description;
     QUrl _identifier;
-    QSourceLocation _sourceLocation;
+    int _line;
+    int _column;
 
 public:
     ValidatorMessageHandler();
     virtual ~ValidatorMessageHandler();
 
-    void handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const QSourceLocation & sourceLocation);
+    void handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const int line, const int column);
 
+    bool hasMessage()
+    {
+        return _hasMessage;
+    }
     QtMsgType type()
     {
         return _type;
@@ -56,23 +59,17 @@ public:
     {
         return _identifier;
     }
-    const QSourceLocation &sourceLocation()
-    {
-        return _sourceLocation ;
-    }
     int line()
     {
-        return _sourceLocation.line() ;
+        return _line ;
     }
     int column()
     {
-        return _sourceLocation.column() ;
+        return _column ;
     }
 
     QString descriptionInPlainText();
 
 };
-
-#endif
 
 #endif // VALIDATORMESSAGEHANDLER_H

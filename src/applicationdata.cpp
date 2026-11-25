@@ -67,7 +67,7 @@ ApplicationData::ApplicationData()
         Utils::error(tr("Unable to load Balsamiq plugin")) ;
     } else {
         pluginCode ++ ;
-        _plugins.insert(QString(pluginCode), plugin);
+        _plugins.insert(QString(QChar(pluginCode)), plugin);
     }
     XsdPlugin *xsdPlugin = new XsdPlugin();
     _xsdPlugin = xsdPlugin;
@@ -75,7 +75,7 @@ ApplicationData::ApplicationData()
         Utils::error(tr("Unable to load XSD plugin")) ;
     } else {
         pluginCode ++ ;
-        _plugins.insert(QString(pluginCode), xsdPlugin);
+        _plugins.insert(QString(QChar(pluginCode)), xsdPlugin);
     }
     configureXsdCache();
     _uiServices = new UIServices() ;

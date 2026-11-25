@@ -38,7 +38,7 @@ class XSLTNavigatorWidget : public QWidget
     Q_OBJECT
     bool _isInfoEnabled;
 
-    void loadChildrenItems(const bool isTemplate, QTreeWidgetItem *topItem, QHash<QString, Element*> &data, const QString &typeString);
+    void loadChildrenItems(const bool isTemplate, QTreeWidgetItem *topItem, QMultiHash<QString, Element*> &data, const QString &typeString);
     void loadTemplates(XsltHelper *xsltHelper, QTreeWidgetItem  *topItem);
     void loadFunctions(XsltHelper *xsltHelper, QTreeWidgetItem *topItem);
     Element *getSelectedItem();

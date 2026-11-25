@@ -54,7 +54,7 @@ GuidedValidationDialog::GuidedValidationDialog(QWidget *parent, ApplicationData 
     int newWidth = qMax(widthLButton, widthSButton) * 1.3;
     ui->cmdLoadXML->setFixedWidth(newWidth);
     ui->cmdLoadXSD->setFixedWidth(newWidth);
-    _sizeIcon = ui->statusXML->pixmap()->width();
+    _sizeIcon = ui->statusXML->pixmap().width();
     ui->statusXML->setFixedWidth(_sizeIcon);
     ui->statusXSD->setFixedWidth(_sizeIcon);
     resetData();
@@ -170,7 +170,7 @@ void GuidedValidationDialog::executeNewCalculation()
     _isError = false ;
     _isValid = false ;
     _message = "" ;
-    _currentCalculation = QtConcurrent::run(this, &GuidedValidationDialog::executeCalculationInThread, dataFile(), schemaFile());
+    _currentCalculation = QtConcurrent::run(&GuidedValidationDialog::executeCalculationInThread, this, dataFile(), schemaFile());
     QTimer::singleShot(TimeoutForPolling, this, SLOT(checkIfDone()));
     _calculating = true ;
 }

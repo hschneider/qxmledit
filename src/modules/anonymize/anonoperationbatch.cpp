@@ -31,6 +31,7 @@
 #include "modules/anonymize/xmlanonutils.h"
 #include "modules/anonymize/algstat/anonalgstatcontext.h"
 #include "utils.h"
+#include "modules/utils/codecdevice.h"
 
 AnonOperationResult::AnonOperationResult()
 {
@@ -197,9 +198,14 @@ const AnonOperationResult *AnonOperationBatch::execute(QIODevice *input, QIODevi
     QXmlStreamReader xmlReader;
     QXmlStreamWriter xmlWriter;
 
+    // Qt 6 writers are UTF-8 only: CodecDevice writes the document encoding.
+    CodecDevice utf8Output(output, NULL);
+    utf8Output.open(QIODevice::WriteOnly);
+    QScopedPointer<CodecDevice> encodedOutput;
+
     xmlReader.clear();
     xmlReader.setDevice(input);
-    xmlWriter.setDevice(output);
+    xmlWriter.setDevice(&utf8Output);
     //Let's do the same namespace processing of the editor.
     xmlReader.setNamespaceProcessing(false);
     while(!xmlReader.atEnd()) {
@@ -271,14 +277,15 @@ const AnonOperationResult *AnonOperationBatch::execute(QIODevice *input, QIODevi
             _documentEncoding = xmlReader.documentEncoding().toString();
             _isDocumentStandalone = xmlReader.isStandaloneDocument();
             _documentVersion = xmlReader.documentVersion().toString();
-            if(!_documentEncoding.isEmpty()) {
-                xmlWriter.setCodec(_documentEncoding.toLatin1().data());
+            CodecDevice *declaringOutput = &utf8Output;
+            QTextCodec *codec = _documentEncoding.isEmpty() ? NULL : QTextCodec::codecForName(_documentEncoding.toLatin1());
+            if(NULL != codec) {
+                encodedOutput.reset(new CodecDevice(output, codec));
+                encodedOutput->open(QIODevice::WriteOnly);
+                xmlWriter.setDevice(encodedOutput.data());
+                declaringOutput = encodedOutput.data();
             }
-            if(_isDocumentStandalone) {
-                xmlWriter.writeStartDocument(_documentVersion, _isDocumentStandalone);
-            } else {
-                xmlWriter.writeStartDocument(_documentVersion);
-            }
+            declaringOutput->writeStartDocument(xmlWriter, _documentVersion, _isDocumentStandalone ? 1 : -1);
         }
         break;
         case QXmlStreamReader::EndDocument:

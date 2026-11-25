@@ -330,7 +330,7 @@ void EditElement::setUpdatedAttr(const int row)
     if(isStarted && (row >= 0)) {
         QTableWidgetItem * item = ui.attrTable->item(row, A_COLUMN_MOD);
         if(NULL != item) {
-            item->setBackgroundColor(modColor);
+            item->setBackground(modColor);
         }
         checkNamespace();
     }
@@ -349,7 +349,7 @@ void EditElement::setUpdatedElement(const int row)
     if(isStarted && (row >= 0)) {
         QTableWidgetItem * item = ui.elementTable->item(row, A_COLUMN_MOD);
         if(NULL != item) {
-            item->setBackgroundColor(modColor);
+            item->setBackground(modColor);
         }
     }
 }
@@ -378,8 +378,8 @@ void EditElement::on_delAttribute_clicked()
         rows.insert(item->row());
     }
     if(!rows.isEmpty()) {
-        QList<int> rowList = rows.toList() ;
-        qSort(rowList.begin(), rowList.end(), qGreater<int>());
+        QList<int> rowList = rows.values() ;
+        std::sort(rowList.begin(), rowList.end(), std::greater<int>());
         const int rowCount = rows.count();
         if(rowCount > 0) {
             // remove from the last row
@@ -546,12 +546,12 @@ int EditElement::appendTextNodeInTable(QTableWidget *table, const bool isEditabl
     QTableWidgetItem *itemCDATA = new QTableWidgetItem();
     itemCDATA->setCheckState(isCDATA ? Qt::Checked : Qt::Unchecked);
     itemCDATA->setFlags(itemCDATA->flags() & (~Qt::ItemIsEditable));
-    itemCDATA->setData(Qt::UserRole, qVariantFromValue((void*)userData));
+    itemCDATA->setData(Qt::UserRole, QVariant::fromValue((void*)userData));
     itemMod->setFlags(itemMod->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable));
-    itemMod->setData(Qt::UserRole, qVariantFromValue((void*)userData));
+    itemMod->setData(Qt::UserRole, QVariant::fromValue((void*)userData));
     if(!isEditable) {
         itemCDATA->setFlags(itemCDATA->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsUserCheckable));
-        itemCDATA->setBackgroundColor(QColor::fromRgb(0xC0, 0xC0, 0xC0));
+        itemCDATA->setBackground(QColor::fromRgb(0xC0, 0xC0, 0xC0));
     }
 
     QTableWidgetItem *itemText = new QTableWidgetItem("");
@@ -561,10 +561,10 @@ int EditElement::appendTextNodeInTable(QTableWidget *table, const bool isEditabl
     table->setItem(row, T_COLUMN_CDATA, itemCDATA);
     table->setItem(row, T_COLUMN_TEXT, itemText);
     table->setItem(row, T_COLUMN_MOD, itemMod);
-    itemText->setData(Qt::UserRole, qVariantFromValue((void*)userData));
+    itemText->setData(Qt::UserRole, QVariant::fromValue((void*)userData));
     if(!isEditable) {
         itemText->setFlags(itemText->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsUserCheckable));
-        itemText->setBackgroundColor(QColor::fromRgb(0xC0, 0xC0, 0xC0));
+        itemText->setBackground(QColor::fromRgb(0xC0, 0xC0, 0xC0));
     }
     _textModified = true;
     return row ;

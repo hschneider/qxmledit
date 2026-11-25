@@ -329,8 +329,8 @@ bool NodesRelationsDialog::loadFile(const QString &filePath)
     QFileInfo fileInfo(filePath);
     qint64 fileSize = fileInfo.size();
     QDateTime dtLastMod = fileInfo.lastModified();
-    QString dateMod = dtLastMod.toString(Qt::DefaultLocaleLongDate);
-    QString dateAccessed = fileInfo.lastRead().toString(Qt::DefaultLocaleLongDate);
+    QString dateMod = QLocale().toString(dtLastMod, QLocale::LongFormat);
+    QString dateAccessed = QLocale().toString(fileInfo.lastRead(), QLocale::LongFormat);
     QString toolTip = tr("%1\n  last accessed on %2\n  last updated on %3\n  size %4").arg(filePath).arg(dateAccessed).arg(dateMod).arg(Utils::getSizeForPresentation(fileSize));
     ui->infoLabelFile->setToolTip(toolTip);
     ui->infoLabelFile->setVisible(true);
@@ -474,7 +474,7 @@ bool NodesRelationsDialog::exportAttributesCSVOnDevice(QIODevice &ioDevice)
     bool isFile = className == "QFile";
     if(ioDevice.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream outStream(&ioDevice);
-        outStream.setCodec("utf-8");
+        outStream.setEncoding(QStringConverter::Utf8);
         controller.exportAttributesInCSVToStream(outStream, _attributesSummaryData);
         outStream.flush();
         ioDevice.close();

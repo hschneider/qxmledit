@@ -29,7 +29,7 @@
 #include <QtGui>
 #include <QtXml/qdom.h>
 #include <QtXml/QDomAttr>
-#include <QtXml/QXmlAttributes>
+#include <QXmlAttributes>
 #include <QInputDialog>
 #include "xmlEdit.h"
 #include "utils.h"

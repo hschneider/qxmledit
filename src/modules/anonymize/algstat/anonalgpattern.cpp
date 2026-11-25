@@ -62,13 +62,13 @@ QString AnonStatAlgPattern::scanPattern(const QString &token, ScanPatternInfo &i
         DD(qDebug() << QString("  input=%1").arg(theChar));
         if(theChar.isLetter()) {
             if(theChar.isLower()) {
-                pattern.append(ALPHA_LOWER);
+                pattern.append(QChar(ALPHA_LOWER));
             } else {
-                pattern.append(ALPHA_UPPER);
+                pattern.append(QChar(ALPHA_UPPER));
             }
             if(AnonProducer::ASCII == info.type) {
                 DD(qDebug() << QString("  ascii"));
-                if(theChar > 127) {
+                if(theChar.unicode() > 127) {
                     DD(qDebug() << QString("  over"));
                     if(AnonCharUtils::isCyrillic(theChar)) {
                         info.type = AnonProducer::CYRILLIC;
@@ -82,7 +82,7 @@ QString AnonStatAlgPattern::scanPattern(const QString &token, ScanPatternInfo &i
                 }
             }
         } else if(theChar.isDigit()) {
-            pattern.append(DIGIT);
+            pattern.append(QChar(DIGIT));
         } else {
             pattern.append(theChar);
         }

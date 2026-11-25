@@ -100,7 +100,7 @@ void ConfigureSessionsWidget::on_deleteData_clicked()
             }
             bool isValidChoice = true ;
             SessionDataInterface::EDateInterval dateInterval;
-            QDateTime dt(ui->dateLimit->date());
+            QDateTime dt(ui->dateLimit->date().startOfDay());
             if(ui->delOlderOneMonth->isChecked()) {
                 dateInterval = SessionDataInterface::DATE_INTERVAL_1_MONTH ;
             } else if(ui->delOlderSixMonth->isChecked()) {

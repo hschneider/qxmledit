@@ -245,7 +245,7 @@ QList<XSchemaObject*> NavigationTree::sortObjectsByName(const QList<XSchemaObjec
         map.insert(nameLowerCase, object);
         keys.append(nameLowerCase);
     }
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
     foreach(QString key, keys) {
         QList<XSchemaObject*> values = map.values(key);
         result.append(values);
@@ -269,7 +269,7 @@ QTreeWidgetItem *NavigationTree::objectItem(XSchemaObject * object, QIcon icon)
     QTreeWidgetItem *item = new QTreeWidgetItem(0);
     item->setText(0, mangleName(object));
     item->setIcon(0, icon);
-    item->setData(0, Qt::UserRole, qVariantFromValue((void*)object));
+    item->setData(0, Qt::UserRole, QVariant::fromValue((void*)object));
     return item;
 }
 
@@ -330,7 +330,7 @@ void NavigationTree::loadNavigationBox(XSDSchema *schema)
         item->setText(0, name);
         item->setToolTip(0, name);
         item->setIcon(0, referenceIcon);
-        item->setData(0, Qt::UserRole, qVariantFromValue((void*)object));
+        item->setData(0, Qt::UserRole, QVariant::fromValue((void*)object));
         topLevelReferences->addChild(item);
         allNavigationItems.append(item);
     }
@@ -361,7 +361,7 @@ void NavigationTree::loadNavigationBox(XSDSchema *schema)
             QTreeWidgetItem *item = new QTreeWidgetItem(0);
             item->setText(0, finalName);
             item->setIcon(0, elementIcon);
-            item->setData(0, Qt::UserRole, qVariantFromValue((void*)object));
+            item->setData(0, Qt::UserRole, QVariant::fromValue((void*)object));
             topLevelOtherElements->addChild(item);
             allNavigationItems.append(item);
         }

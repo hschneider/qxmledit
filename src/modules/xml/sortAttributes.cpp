@@ -53,7 +53,7 @@ void Element::sortAttributes(QList<int> *undoPositionList, const bool isRecursiv
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
     names.sort(Qt::CaseInsensitive);
 #else
-    qSort(names.begin(), names.end(), sortFunctionCaseInsensitive);
+    std::sort(names.begin(), names.end(), sortFunctionCaseInsensitive);
 #endif
     foreach(const QString & key, names) {
         newPos.append(well.value(key));
@@ -145,7 +145,7 @@ QList<Attribute*> Element::sortAttributesList(const QVector<Attribute *> &attrib
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
     attrNamesList.sort(Qt::CaseInsensitive);
 #else
-    qSort(attrNamesList.begin(), attrNamesList.end(), sortFunctionCaseInsensitive);
+    std::sort(attrNamesList.begin(), attrNamesList.end(), sortFunctionCaseInsensitive);
 #endif
     QList<Attribute*> result;
     foreach(const QString & key, attrNamesList) {

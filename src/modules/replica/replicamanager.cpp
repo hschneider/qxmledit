@@ -162,7 +162,7 @@ QString ReplicaManager::formatAlpha(const int index, const bool isPadded, const 
     bool first = true;
     do {
         int digit = valueNumber % 26;
-        QChar ch = 'A' + ((isPadded || first) ? 0 : -1) + digit;
+        QChar ch('A' + ((isPadded || first) ? 0 : -1) + digit);
         value = QString("%1%2").arg(ch).arg(value);
         valueNumber /= 26 ;
         first = false;

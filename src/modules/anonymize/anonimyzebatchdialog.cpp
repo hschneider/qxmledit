@@ -255,7 +255,7 @@ void AnonimyzeBatchDialog::startOperation()
     ui->buttonBox->setEnabled(false);
     _running = true ;
     _aborted = false ;
-    _future = QtConcurrent::run(this, &AnonimyzeBatchDialog::doOperationWorkThread);
+    _future = QtConcurrent::run(&AnonimyzeBatchDialog::doOperationWorkThread, this);
     QTimer::singleShot(POLL_TIMEOUT, this, SLOT(checkIfDone()));
 }
 

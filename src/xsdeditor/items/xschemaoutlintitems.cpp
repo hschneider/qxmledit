@@ -37,7 +37,7 @@ OutlineElementItem::OutlineElementItem(XsdGraphicContext *newContext, XSchemaOut
       _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     _graphicsItem->setUseDimShadow(true);
     init(newContext);
     setItem(newItem);
@@ -285,7 +285,7 @@ OutlineSequenceItem::OutlineSequenceItem(XsdGraphicContext *newContext, XSchemaO
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -429,7 +429,7 @@ OutlineChoiceItem::OutlineChoiceItem(XsdGraphicContext *newContext, XSchemaOutli
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -574,7 +574,7 @@ OutlineAllItem::OutlineAllItem(XsdGraphicContext *newContext, XSchemaOutlineAll 
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -711,7 +711,7 @@ OutlineGroupItem::OutlineGroupItem(XsdGraphicContext *newContext, XSchemaOutline
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -854,7 +854,7 @@ OutlineAnyItem::OutlineAnyItem(XsdGraphicContext *newContext, XSchemaOutlineAny 
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }

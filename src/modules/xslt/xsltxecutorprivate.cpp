@@ -23,9 +23,7 @@
 // private XSLTExecutor classes
 
 #include "xsltexecutor.h"
-#include <QXmlQuery>
-#include <QXmlSerializer>
-#include <QTextCodec>
+#include <QStringDecoder>
 #include <QFile>
 #include "utils.h"
 #include "regola.h"
@@ -43,8 +41,7 @@ XSLTExecutor::MessageHandler::~MessageHandler()
 
 void XSLTExecutor::MessageHandler::handleMessage(QtMsgType type,
         const QString &description,
-        const QUrl &/*identifier*/,
-        const QSourceLocation &sourceLocation)
+        const qint64 line, const qint64 column)
 {
     _mutex.lock();
     SourceMessage *message = new SourceMessage();
@@ -64,20 +61,20 @@ void XSLTExecutor::MessageHandler::handleMessage(QtMsgType type,
     case QtFatalMsg:
         thisType = SourceMessage::Error;
         break;
-#if QT_VERSION >= QT_VERSION_CHECK(5,5,0)
     case QtInfoMsg:
         thisType = SourceMessage::Info;
         break;
-#endif
     default:
         thisType = SourceMessage::Error;
         break;
     }
     message->setType(thisType);
-    message->setLine(sourceLocation.line());
-    message->setColumn(sourceLocation.column());
+    message->setLine(line);
+    message->setColumn(column);
     _result.addMessage(message);
-    _result.setError(true);
+    if(SourceMessage::Error == thisType) {
+        _result.setError(true);
+    }
     _mutex.unlock();
 }
 
@@ -262,11 +259,9 @@ bool XSLTExecutor::OutputFileHolder::close()
     return false ;
 }
 
-bool XSLTExecutor::OutputFileHolder::evaluateTo(QXmlQuery &query)
+bool XSLTExecutor::OutputFileHolder::writeResult(const QByteArray &data, const QString &/*encoding*/)
 {
-    QXmlSerializer result(query, &_device);
-    const bool success = query.evaluateTo(&result);
-    return success ;
+    return _device.write(data) == data.size();
 }
 
 bool XSLTExecutor::OutputFileHolder::isFile()
@@ -300,10 +295,14 @@ bool XSLTExecutor::OutputStringHolder::close()
     return true;
 }
 
-bool XSLTExecutor::OutputStringHolder::evaluateTo(QXmlQuery &query)
+bool XSLTExecutor::OutputStringHolder::writeResult(const QByteArray &data, const QString &encoding)
 {
-    const bool success = query.evaluateTo(_target);
-    return success ;
+    QStringDecoder decoder(encoding.isEmpty() ? QString("UTF-8") : encoding);
+    if(!decoder.isValid()) {
+        return false;
+    }
+    *_target = decoder.decode(data);
+    return !decoder.hasError();
 }
 
 bool XSLTExecutor::OutputStringHolder::createTempFilePath()

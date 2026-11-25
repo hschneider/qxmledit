@@ -79,19 +79,19 @@ void RemovePrefixDialog::updateSelection()
         ui->prefixes->clear();
         break;
     case TargetSelection::AllItems:
-        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.allPrefixes.toList());
+        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.allPrefixes.values());
         break;
     case TargetSelection::SelectedItem:
-        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.selectionPrefixes.toList());
+        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.selectionPrefixes.values());
         break;
     case TargetSelection::SelectedItemAndChildren:
-        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.selectionPrefixesRecursive.toList());
+        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.selectionPrefixesRecursive.values());
         break;
     case TargetSelection::Bookmarks:
-        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.bookmarksPrefixes.toList());
+        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.bookmarksPrefixes.values());
         break;
     case TargetSelection::BookmarksAndChildren:
-        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.bookmarksPrefixesRecursive.toList());
+        Utils::updateEditableCombo(ui->prefixes, _info->prefixInfo.bookmarksPrefixesRecursive.values());
         break;
     }
 }

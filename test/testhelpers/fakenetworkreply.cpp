@@ -53,7 +53,7 @@ void FakeNetworkReply::onTimerStart()
     if( ok ) {
         emit finished();
     } else {
-        emit error(TimeoutError);
+        emit errorOccurred(TimeoutError);
     }
 }
 

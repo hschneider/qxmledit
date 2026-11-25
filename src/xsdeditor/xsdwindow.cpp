@@ -1584,7 +1584,7 @@ QString XSDWindow::chooseRoot(QWidget *parent, QList<XSchemaElement*> elements)
 
 void XSDWindow::wheelEvent(QWheelEvent *event)
 {
-    const int delta = event->delta() ;
+    const int delta = event->angleDelta().y() ;
     const Qt::KeyboardModifiers modifier = event->modifiers();
     const bool isCtrl = (modifier & Qt::ControlModifier) == Qt::ControlModifier ;
     if(delta > 0) {

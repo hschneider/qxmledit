@@ -118,7 +118,7 @@ void XSDFullAnnotationsDialog::renderItem(const int row, XSchemaObject *srcObj)
 void XSDFullAnnotationsDialog::setItem(const int row, const int column, const QString &text, XSchemaObject *src, const bool isEnabled)
 {
     QTableWidgetItem *item = new QTableWidgetItem(text) ;
-    item->setData(Qt::UserRole, qVariantFromValue((void*)src));
+    item->setData(Qt::UserRole, QVariant::fromValue((void*)src));
     item->setFlags(item->flags() &= ~(Qt::ItemIsEditable));
     if(!isEnabled) {
         item->setFlags(item->flags() &= ~(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));

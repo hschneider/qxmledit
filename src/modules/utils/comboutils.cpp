@@ -136,7 +136,7 @@ void ComboUtils::loadButtonMenu(QToolButton *button, QObject *target, const char
         QAction *action = new QAction(item->text, menu);
         item->action = action ;
         menu->addAction(action);
-        action->setData(qVariantFromValue((void*)item));
+        action->setData(QVariant::fromValue((void*)item));
         if(NULL != target) {
             QObject::connect(action, SIGNAL(triggered()), target, method);
         }

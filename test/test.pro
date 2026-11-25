@@ -39,11 +39,8 @@ DEFINES += QXMLEDITSESSIONS_LIBRARY_STATIC
 DEFINES += QXMLEDIT_NOMAIN
 DEFINES += QXMLEDIT_TEST
 
-QT       += gui xml xmlpatterns svg testlib network sql
-
-macx: {
-    QT       += macextras
-}
+QT       += gui xml svg testlib network sql core5compat
+include(../src/libxml.pri)
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT       += printsupport widgets core
@@ -56,7 +53,6 @@ isEqual(ENABLE_SCXML, "Y") {
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 win32 {
-    QT += winextras
     DEFINES += "_NO_W32_PSEUDO_MODIFIERS"
     DEFINES += "NOGDI"
 }

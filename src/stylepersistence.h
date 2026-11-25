@@ -29,7 +29,7 @@ class StylePersistence : public QObject
 {
 
     Q_OBJECT
-    QHash<QString, TokenEntry*> mapTokens;
+    QMultiHash<QString, TokenEntry*> mapTokens;
 
 public:
     StylePersistence();

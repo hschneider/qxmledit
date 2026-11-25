@@ -123,7 +123,7 @@ void SearchCommandDialog::addItem(MenuSearchData *data)
     item->setText(0, data->textToShow);
     item->setText(1, data->action->toolTip());
     ui->commands->addTopLevelItem(item);
-    item->setData(0, Qt::UserRole, qVariantFromValue((void*)data->action));
+    item->setData(0, Qt::UserRole, QVariant::fromValue((void*)data->action));
 }
 
 QString SearchCommandDialog::normalizeTextForSearch(const QString &text)

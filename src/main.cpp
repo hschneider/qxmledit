@@ -48,10 +48,6 @@ extern const char *APP_TITLE ;
 
 int doXSL(ApplicationData *appData, StartParams *startParams);
 
-#if defined(MACOS_SPECIFIC)
-#include <QtMac>
-#endif
-
 #if !defined(QXMLEDIT_NOMAIN)
 const char *APP_TITLE = QT_TR_NOOP("QXmlEdit");
 #endif //QXMLEDIT_NOMAIN
@@ -189,7 +185,7 @@ static void addMenuExtra(QXmlEditApplication *app, MainMenuBlock *mainMenuBlock)
     app->connect(mainMenuBlock->_raiseWindows, SIGNAL(triggered()), app, SLOT(onRaiseWindows()));
 
 #if defined(MACOS_SPECIFIC)
-    qt_mac_set_dock_menu(mainMenuBlock->_contextMenu);
+    mainMenuBlock->_contextMenu->setAsDockMenu();
 #endif
 }
 
@@ -248,10 +244,6 @@ void msgBoxDebug(const QString message)
 
 /** \brief: insert here all the fundamentals todo using Utils::TODO_THIS_RELEASE().
   */
-#if defined(MACOS_SPECIFIC)
-void qt_mac_set_dock_menu(QMenu *menu);
-#endif
-
 void todo()
 {
 }
@@ -263,9 +255,6 @@ void experimental()
                            QObject::tr("This is not a released version.\nThis is a developer preview."));
     QTimer::singleShot(2500, &warningBox, SLOT(hide()));
     warningBox.exec();
-#endif
-#if defined(MACOS_SPECIFIC) && defined(QXMLEDIT_VERSION_IS_SNAPSHOT)
-    QtMac::setBadgeLabelText("Beta");
 #endif
 }
 

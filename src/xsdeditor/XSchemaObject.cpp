@@ -1478,7 +1478,7 @@ QList<XSchemaObject*> XSchemaObject::sortObjectsByName(const QList<XSchemaObject
         map.insert(nameLowerCase, object);
         keys.append(nameLowerCase);
     }
-    qSort(keys);
+    std::sort(keys.begin(), keys.end());
     foreach(QString key, keys) {
         QList<XSchemaObject*> values = map.values(key);
         result.append(values);

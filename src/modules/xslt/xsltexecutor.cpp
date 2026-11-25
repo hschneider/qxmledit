@@ -21,11 +21,16 @@
  **************************************************************************/
 
 #include "xsltexecutor.h"
-#include <QXmlQuery>
-#include <QXmlSerializer>
-#include <QTextCodec>
 #include <QProcess>
 #include "utils.h"
+#include "modules/xml/libxmlutils.h"
+#include <libxml/parser.h>
+#include <libxslt/xslt.h>
+#include <libxslt/xsltInternals.h>
+#include <libxslt/transform.h>
+#include <libxslt/variables.h>
+#include <libxslt/xsltutils.h>
+#include <cstdarg>
 
 #ifdef QXMLEDIT_TEST
 QStringList XSLTExecutor::testSaxonArguments;
@@ -60,6 +65,17 @@ XSLTExecutor::~XSLTExecutor()
     }
 }
 
+// Collects the (fragmented) text that libxslt sends to its generic error function.
+static void xsltCollectMessage(void *context, const char *format, ...)
+{
+    char buffer[4096];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    static_cast<QString*>(context)->append(QString::fromUtf8(buffer));
+}
+
 bool XSLTExecutor::innerExecQt(MessagesOperationResult &result,
                                QIODevice *inputDevice, QIODevice *xsltSheetDevice,
                                OutputHolder *outputDevice,
@@ -70,25 +86,74 @@ bool XSLTExecutor::innerExecQt(MessagesOperationResult &result,
 #endif
 
     XSLTExecutor::MessageHandler messageHandler(result);
-    QXmlNamePool namePool;
-    QXmlQuery xslt(QXmlQuery::XSLT20, namePool);
-    foreach(const QString &key, parameters.keys()) {
-        xslt.bindVariable(key, QXmlItem(parameters[key]));
-    }
-    xslt.setFocus(inputDevice);
-    xslt.setMessageHandler(&messageHandler);
-    xslt.setQuery(xsltSheetDevice);
-
+    QList<LibXmlMessage> messages;
+    QString xsltText;
     bool success = false ;
-    if(xslt.isValid()) {
-#ifdef QXMLEDIT_TEST
-        if(XSLTExecutor::stop) {
-            return true;
+    {
+        LibXmlErrors errors;
+        xsltSetGenericErrorFunc(&xsltText, xsltCollectMessage);
+        const QByteArray xsltData = xsltSheetDevice->readAll();
+        const QByteArray inputData = inputDevice->readAll();
+        xmlDocPtr xsltDoc = xmlReadMemory(xsltData.constData(), xsltData.size(), NULL, NULL, XML_PARSE_BIG_LINES);
+        // the stylesheet owns xsltDoc after a successful parse
+        xsltStylesheetPtr style = (NULL != xsltDoc) ? xsltParseStylesheetDoc(xsltDoc) : NULL;
+        if((NULL == style) && (NULL != xsltDoc)) {
+            xmlFreeDoc(xsltDoc);
         }
+        if(NULL == style) {
+            messages.append(errors.messages);
+            addError(result, ErrorXSLTInvalid, QObject::tr("XSL is not valid."), -1, -1);
+        } else {
+#ifdef QXMLEDIT_TEST
+            if(XSLTExecutor::stop) {
+                xsltFreeStylesheet(style);
+                xsltSetGenericErrorFunc(NULL, NULL);
+                return true;
+            }
 #endif
-        success = outputDevice->evaluateTo(xslt);
-    } else {
-        addError(result, ErrorXSLTInvalid, QObject::tr("XSL is not valid."), -1, -1);
+            xmlDocPtr inputDoc = xmlReadMemory(inputData.constData(), inputData.size(), NULL, NULL, XML_PARSE_BIG_LINES);
+            if(NULL != inputDoc) {
+                xsltTransformContextPtr context = xsltNewTransformContext(style, inputDoc);
+                QList<QByteArray> names;
+                QList<QByteArray> values;
+                foreach(const QString &key, parameters.keys()) {
+                    names.append(key.toUtf8());
+                    values.append(parameters[key].toUtf8());
+                    xsltQuoteOneUserParam(context, reinterpret_cast<const xmlChar*>(names.last().constData()),
+                                          reinterpret_cast<const xmlChar*>(values.last().constData()));
+                }
+                xmlDocPtr resultDoc = xsltApplyStylesheetUser(style, inputDoc, NULL, NULL, NULL, context);
+                const bool transformError = (NULL == resultDoc) || (context->state == XSLT_STATE_ERROR) || (context->state == XSLT_STATE_STOPPED);
+                if(!transformError) {
+                    xmlChar *output = NULL;
+                    int outputLength = 0;
+                    if(0 == xsltSaveResultToString(&output, &outputLength, resultDoc, style)) {
+                        const QByteArray data(reinterpret_cast<const char*>(output), outputLength);
+                        const QString encoding = LibXmlErrors::toString(style->encoding);
+                        success = outputDevice->writeResult(data, encoding);
+                    }
+                    xmlFree(output);
+                }
+                if(NULL != resultDoc) {
+                    xmlFreeDoc(resultDoc);
+                }
+                xsltFreeTransformContext(context);
+                xmlFreeDoc(inputDoc);
+            }
+            messages.append(errors.messages);
+            xsltFreeStylesheet(style);
+        }
+        xsltSetGenericErrorFunc(NULL, NULL);
+    }
+    const QtMsgType xsltTextType = success ? QtWarningMsg : QtCriticalMsg;
+    foreach(const LibXmlMessage &message, messages) {
+        messageHandler.handleMessage(success ? QtWarningMsg : message.type, message.text, message.line, message.column);
+    }
+    foreach(const QString &line, xsltText.split('\n', Qt::SkipEmptyParts)) {
+        messageHandler.handleMessage(xsltTextType, line.trimmed(), -1, -1);
+    }
+    if(!success && result.isOk()) {
+        addError(result, ErrorRuntime, QObject::tr("XSL transformation failed."), -1, -1);
     }
     return success ;
 }

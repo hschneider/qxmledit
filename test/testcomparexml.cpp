@@ -60,7 +60,7 @@ bool TestCompareXml::ckeckItem(QTreeWidgetItem *item, const QString &text, const
     if(itemText != text){
         return False();
     }
-    QColor bkColor = item->backgroundColor(0);
+    QColor bkColor = item->background(0).color();
     if( expextedColor != bkColor ) {
         return False();
     }
@@ -351,7 +351,9 @@ bool TestCompareXml::testOptionDenormalize()
     if( !testOptionDenormalizeImpl(false, true)) {
         return error("denorm 1");
     }
-    if( !testOptionDenormalizeImpl(true, false)) {
+    // Qt 6 normalizes CRLF inside CDATA when parsing (as the XML spec requires):
+    // the data are equal with the option enabled too.
+    if( !testOptionDenormalizeImpl(true, true)) {
         return error("denorm 2");
     }
     return true ;

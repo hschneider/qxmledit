@@ -250,7 +250,7 @@ bool SnippetHandler::insertSnippetInUI(Snippet* snippet)
                 _topLevelItems.insert(tag, tagItem);
                 tagItem->setText(0, tag);
                 tagItem->setData(COLUMN_DATA_TAG, Qt::UserRole, tag);
-                tagItem->setData(COLUMN_DATA_SNIPPET, Qt::UserRole, qVariantFromValue((void*)NULL));
+                tagItem->setData(COLUMN_DATA_SNIPPET, Qt::UserRole, QVariant::fromValue((void*)NULL));
                 ui->snippets->addTopLevelItem(tagItem);
             }
         } else {
@@ -265,8 +265,8 @@ bool SnippetHandler::insertSnippetInUI(Snippet* snippet)
             item->setText(1, snippet->description());
             tagItem->addChild(item);
             item->setData(COLUMN_DATA_TAG, Qt::UserRole, QVariant(""));
-            item->setData(COLUMN_DATA_SNIPPET, Qt::UserRole, qVariantFromValue((void*)snippet));
-            _snippetItems.insertMulti(snippet->id(), item);
+            item->setData(COLUMN_DATA_SNIPPET, Qt::UserRole, QVariant::fromValue((void*)snippet));
+            _snippetItems.insert(snippet->id(), item);
         }
     } // foreach tags
     /*if( !isOk ) { TODO

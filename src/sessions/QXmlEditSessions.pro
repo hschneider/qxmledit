@@ -33,7 +33,7 @@ include("../cconfig.pri")
 
 ############################ END INSTALLATION FOLDERS DECLARATION #############################################
 
-QT       += sql gui xml xmlpatterns
+QT       += sql gui xml core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4){
 QT       += widgets core

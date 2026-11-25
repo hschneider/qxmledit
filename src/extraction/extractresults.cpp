@@ -23,6 +23,7 @@
 #include "xmlEdit.h"
 #include "extractresults.h"
 #include "utils.h"
+#include "modules/utils/codecdevice.h"
 
 ExtractResults::ExtractResults(QObject *parent) : QObject(parent)
 {
@@ -104,8 +105,9 @@ void ExtractResults::loadFragment(const int page, StringOperationResult &result)
         isError = false ;
         QFile file(_fileName);
         if(file.open(QIODevice::ReadOnly)) {
-            QTextStream textStream(&file);
-            textStream.setCodec(_encoding.toLatin1().data());
+            CodecDevice codecDevice(&file, QTextCodec::codecForName(_encoding.toLatin1()));
+            codecDevice.open(QIODevice::ReadOnly);
+            QTextStream textStream(&codecDevice);
             // read the start lines of the elements
             qint64 startCharacter = _startDocumentCharacterOffset.value(page);
             qint64 endCharacter ;

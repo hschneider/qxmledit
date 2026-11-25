@@ -120,7 +120,7 @@ void SCXMLNavigatorWidget::loadState(SCXMLState *state, QTreeWidgetItem *parentI
         stateName += QString(" %1").arg(tr("parallel"));
     }
     item->setText(0, stateName);
-    item->setData(0, Qt::UserRole, qVariantFromValue((void*)state));
+    item->setData(0, Qt::UserRole, QVariant::fromValue((void*)state));
     if(isFlat || (NULL == parentItem)) {
         ui->states->addTopLevelItem(item);
     } else {

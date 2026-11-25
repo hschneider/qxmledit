@@ -25,6 +25,7 @@
 #include "undo/undosimpleeditcommand.h"
 #include "undo/undodtd.h"
 #include "xmlsavecontext.h"
+#include "modules/utils/codecdevice.h"
 #include "modules/xsd/namespacemanager.h"
 #include "modules/xml/elmpath.h"
 #include "editelementwithtexteditor.h"
@@ -348,10 +349,12 @@ bool Regola::write(QIODevice *device, const bool isMarkSaved)
 
     QString theEncoding = encoding();
 
-    QTextStream streamOut(device);
-    streamOut.setCodec(theEncoding.toLatin1().data());
+    CodecDevice codecDevice(device, QTextCodec::codecForName(theEncoding.toLatin1()));
+    codecDevice.open(QIODevice::WriteOnly);
+    QTextStream streamOut(&codecDevice);
     streamOut << document.toString(_indent);
     streamOut.flush();
+    codecDevice.close();
     device->close();
     if(isMarkSaved) {
         foreach(Element * ep, childItems) {
@@ -377,7 +380,17 @@ bool Regola::writeStreamInternal(QIODevice *device, const bool useEncoding, Elem
         updateMetaInfoFormatting();
     }
 
-    QXmlStreamWriter outputStream(device);
+    QString theEncoding = encoding();
+    QTextCodec *codec = NULL ;
+    if(useEncoding) {
+        codec = QTextCodec::codecForName(theEncoding.toLatin1());
+    }
+    if(NULL == codec) {
+        codec = QTextCodec::codecForName("UTF-8");
+    }
+    CodecDevice codecDevice(device, codec);
+    codecDevice.open(QIODevice::WriteOnly);
+    QXmlStreamWriter outputStream(&codecDevice);
     XMLSaveContext context;
     context.setIndentation(_indent);
     context.setIsSortAttributesAlpha(isSavingSortingAttributes());
@@ -386,13 +399,7 @@ bool Regola::writeStreamInternal(QIODevice *device, const bool useEncoding, Elem
 
     outputStream.setAutoFormatting(false);
     outputStream.setAutoFormattingIndent(_indent);
-    QString theEncoding = encoding();
-    if(useEncoding) {
-        outputStream.setCodec(theEncoding.toLatin1().data());
-    } else {
-        outputStream.setCodec("UTF-8"); // this should be the default anyway
-    }
-    context.setCodec(outputStream.codec());
+    context.setCodec(codec);
     //Se monobyte, usa text mode e crlf, se multibyte, solo \n. Questo a causa di un bug nello streamwritew.
     // il mio codice inserisce crlf, quello di libreria, no.
     device->setTextModeEnabled(context.canUseTextMode());
@@ -477,7 +484,10 @@ bool Regola::writeStreamInternalElement(QIODevice *device, EExportOptions option
         }
     }
 
-    QXmlStreamWriter outputStream(device);
+    QString theEncoding = encoding();
+    CodecDevice codecDevice(device, QTextCodec::codecForName(theEncoding.toLatin1()));
+    codecDevice.open(QIODevice::WriteOnly);
+    QXmlStreamWriter outputStream(&codecDevice);
     XMLSaveContext context;
     context.setIndentation(_indent);
     context.setIsSortAttributesAlpha(isSavingSortingAttributes());
@@ -486,8 +496,6 @@ bool Regola::writeStreamInternalElement(QIODevice *device, EExportOptions option
 
     outputStream.setAutoFormatting(false);
     outputStream.setAutoFormattingIndent(_indent);
-    QString theEncoding = encoding();
-    outputStream.setCodec(theEncoding.toLatin1().data());
 
     Element *first = childItems.size() > 0 ? childItems.at(0) : NULL;
     if(options.testFlag(ExportOptionUseDeclaration)
@@ -2933,7 +2941,7 @@ QString Regola::getCachedPrefixNS(const QString &nsURI)
         }
     }
     QString str = _crapCachePrefixNs[nsURI];
-    if(NULL == str) {
+    if(str.isNull()) {
         str = "" ;
     }
     return str;

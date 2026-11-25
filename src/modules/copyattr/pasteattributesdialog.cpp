@@ -71,7 +71,7 @@ void PasteAttributesDialog::setupUI()
     helper->addSomeWidget(ui->cmdDeselectAll);
     _uiManager.addHelper(helper);
     _uiManager.fireEvent();
-    ui->attributes->sortByColumn(1);
+    ui->attributes->sortByColumn(1, Qt::AscendingOrder);
 }
 
 void PasteAttributesDialog::on_cmdClearClipboard_clicked()
@@ -95,7 +95,7 @@ void PasteAttributesDialog::loadStartData()
 {
     // load session data into combo box
     foreach(CopyAttributesSession * session, _manager->sessions()) {
-        ui->sessions->addItem(session->name(), qVariantFromValue((void*)session));
+        ui->sessions->addItem(session->name(), QVariant::fromValue((void*)session));
     }
     ui->sessions->setCurrentIndex(0);
 }

@@ -630,7 +630,7 @@ void DataWidget::computeImageThreaded()
 
     foreach(int thisWindowHeight, items) {
         int endy = starty + thisWindowHeight ;
-        results.append(QtConcurrent::run(this, &DataWidget::computeImageSlice, starty, endy));
+        results.append(QtConcurrent::run(&DataWidget::computeImageSlice, this, starty, endy));
         starty += windowsHeight ;
     }
     waitCalcImage(results);

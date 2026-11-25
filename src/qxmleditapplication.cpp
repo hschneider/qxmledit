@@ -30,7 +30,6 @@
 #include "utils.h"
 #include <QDataStream>
 #include <QLocalSocket>
-#include <QDesktopWidget>
 #include "qxmleditconfig.h"
 #include "modules/anonymize/anonymizebatch.h"
 #include "extraction/extractfragmentsdialog.h"

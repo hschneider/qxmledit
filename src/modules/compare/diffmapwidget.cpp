@@ -155,7 +155,7 @@ void DiffMapWidget::generateImage()
             foreach(QTreeWidgetItem * item, *_data) {
                 int y = index * factor;
 
-                QColor color = item->backgroundColor(0);
+                QColor color = item->background(0).color();
                 bool drawColor = true ;
                 if(useMeanValue && (lastY == y)) {
                     if(color == equalsColor) {

@@ -159,7 +159,7 @@ AnonContext *AnonAdvDialog::getContext()
 QTableWidgetItem *AnonAdvDialog::newExItem(const int row, const int column, AnonException *exception, const QString &text)
 {
     QTableWidgetItem *item = new QTableWidgetItem(text);
-    item->setData(Qt::UserRole, qVariantFromValue((void*)exception));
+    item->setData(Qt::UserRole, QVariant::fromValue((void*)exception));
     item->setFlags(item->flags() & (~Qt::ItemIsEditable));
     ui->exceptions->setItem(row, column, item);
     return item;
@@ -606,7 +606,7 @@ bool AnonAdvDialog::importUsingFile(const QString &filePath)
         QFile file(filePath);
         if(file.open(QIODevice::ReadOnly)) {
             QTextStream textStream(&file);
-            textStream.setCodec("UTF-8");
+            textStream.setEncoding(QStringConverter::Utf8);
             int imported = import(textStream);
             if(file.error() != QFile::NoError) {
                 Utils::error(this, tr("Error importing data"));

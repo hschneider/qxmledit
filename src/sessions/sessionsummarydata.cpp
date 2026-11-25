@@ -177,8 +177,8 @@ QString SessionFileAccess::tooltip()
     QFileInfo info(_path);
     qint64 fileSize = info.size();
     QDateTime dtLastMod = info.lastModified();
-    QString dateMod = dtLastMod.toString(Qt::DefaultLocaleLongDate);
-    QString dateAccessed = _lastAccess.toString(Qt::DefaultLocaleLongDate);
+    QString dateMod = QLocale().toString(dtLastMod, QLocale::LongFormat);
+    QString dateAccessed = QLocale().toString(_lastAccess, QLocale::LongFormat);
 
     return QString(tr("%1\n  last accessed on %2\n  last updated on %3\n  size %4\n  accessed %5 times")).arg(_path).arg(dateAccessed).arg(dateMod).arg(fileSize).arg(_times);
 }
@@ -207,7 +207,7 @@ BaseSessionDataInfo::SDInfo SessionDirectoryAccess::type()
 
 QString SessionDirectoryAccess::tooltip()
 {
-    QString dateAccessed = _lastAccess.toString(Qt::DefaultLocaleLongDate);
+    QString dateAccessed = QLocale().toString(_lastAccess, QLocale::LongFormat);
     return QString(tr("%1\n  last access: %2")).arg(_path).arg(dateAccessed);
 }
 

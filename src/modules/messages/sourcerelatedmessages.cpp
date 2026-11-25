@@ -109,7 +109,7 @@ void SourceRelatedMessages::loadData()
             item->setIcon(icon);
             break;
         }
-        item->setData(Qt::UserRole, qVariantFromValue((void*)msg));
+        item->setData(Qt::UserRole, QVariant::fromValue((void*)msg));
         ui->messages->addItem(item);
     }
 }

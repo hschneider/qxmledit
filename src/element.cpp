@@ -321,7 +321,7 @@ QString Element::limitTextWithEllipsis(const QString &inputText)
     } else {
         result = inputData ;
     }
-    int indexOfLF = result.indexOf(terminatorSearch, 0);
+    int indexOfLF = terminatorSearch.indexIn(result, 0);
     if(indexOfLF >= 0) {
         result = result.left(indexOfLF);
         appendEllipsis = true ;
@@ -659,7 +659,7 @@ void Element::display(QTreeWidgetItem *me, PaintInfo *paintInfo, const bool setI
         ui = me ;
         setChildrenLeavesHiddenState(me, false);
     }
-    me->setData(0, Qt::UserRole, qVariantFromValue((void*)this));
+    me->setData(0, Qt::UserRole, QVariant::fromValue((void*)this));
     me->setText(0, "");
     displayAlt(me, paintInfo);
     if(wasOpen) {
@@ -1718,7 +1718,7 @@ void Element::unhilite()
 {
     QTreeWidgetItem *theUi = getUI();
     if(NULL != theUi) {
-        theUi->setBackgroundColor(0, QColor(0xFF, 0xFF, 0xFF, 0));
+        theUi->setBackground(0, QColor(0xFF, 0xFF, 0xFF, 0));
     }
 }
 
@@ -1726,7 +1726,7 @@ void Element::hilite()
 {
     QTreeWidgetItem *theUi = getUI();
     if(NULL != theUi) {
-        theUi->setBackgroundColor(0, QColor(0xFF, 0xC0, 0x40));
+        theUi->setBackground(0, QColor(0xFF, 0xC0, 0x40));
     }
     parentRule->addHilite(this);
 }

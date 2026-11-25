@@ -59,7 +59,7 @@ CompareSideBySideView::~CompareSideBySideView()
 void CompareSideBySideView::setGraphic(QTreeWidgetItem *currentNodeItem, const EDiff::KDiff state, const bool isEmpty)
 {
     if(isEmpty) {
-        currentNodeItem->setBackgroundColor(0, _chrome.emptyColor());
+        currentNodeItem->setBackground(0, _chrome.emptyColor());
         return ;
     }
 
@@ -100,7 +100,7 @@ void CompareSideBySideView::setGraphic(QTreeWidgetItem *currentNodeItem, const E
         icon = _chrome.deletedIcon() ;
         break;
     }
-    currentNodeItem->setBackgroundColor(0, bkColor);
+    currentNodeItem->setBackground(0, bkColor);
     if(useIcon) {
         currentNodeItem->setIcon(0, icon);
     }
@@ -221,11 +221,11 @@ void CompareSideBySideView::setupItem(DiffSingleNodeResult *node, QTreeWidgetIte
             setLastItemDiff(isReference, itemsList, diffList, info);
         }
         if(!isEmpty) {
-            //attributeTextItem->setBackgroundColor(0, colo);aaa
-            attributeTextItem->setBackgroundColor(0, currentNodeItem->backgroundColor(0));
+            //attributeTextItem->setBackground(0, colo);aaa
+            attributeTextItem->setBackground(0, currentNodeItem->background(0).color());
             attributeTextItem->setText(0, tr("Attributes:"));
         } else {
-            attributeTextItem->setBackgroundColor(0, _chrome.emptyColor());
+            attributeTextItem->setBackground(0, _chrome.emptyColor());
         }
         currentNodeItem->addChild(attributeTextItem);
 
@@ -293,13 +293,13 @@ void CompareSideBySideView::appendAttribute(DiffSingleNodeResult *node, QTreeWid
             break;
         }
         if(useColor) {
-            attributeItem->setBackgroundColor(0, bkColor);
+            attributeItem->setBackground(0, bkColor);
         }
         if(useIcon) {
             attributeItem->setIcon(0, icon);
         }
     } else {
-        attributeItem->setBackgroundColor(0, _chrome.emptyColor());
+        attributeItem->setBackground(0, _chrome.emptyColor());
     }
     attributeItem->setText(0, text);
     attributeTextItem->addChild(attributeItem);

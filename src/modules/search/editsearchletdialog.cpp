@@ -90,7 +90,7 @@ void EditSearchletDialog::setUpData()
     ui->description->setText(_snippet->description());
     ui->payload->setText(_snippet->payload());
     // convert tags in qstring
-    QStringList tagList = QStringList::fromSet(_snippet->tags());
+    QStringList tagList = _snippet->tags().values();
     ui->tags->setText(tagList.join(","));
     ui->creationDate->setText(_snippet->creationDate().toString());
     ui->updateDate->setText(_snippet->updateDate().toString());

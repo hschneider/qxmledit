@@ -112,7 +112,7 @@ VStyle* QXmlEditData::defaultStyle() const
 
 VStyle *QXmlEditData::getStyle(const QString &tag) const
 {
-    if((NULL == tag) || (tag.length() == 0)) {
+    if(tag.isEmpty()) {
         return NULL ;
     }
     foreach(VStyle * style, _styles) {
@@ -610,6 +610,11 @@ QList<Element *> &ClipboardElementList::elements()
 void QXmlEditData::onClipboardDataChanged()
 {
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    if(NULL == mimeData) {
+        cleanClipBoardData();
+        emit clipboardDataChanged(false);
+        return ;
+    }
     if(mimeData->hasFormat(QXmlEditMimeDataFormat)) {
         QByteArray mimeDataArray = mimeData->data(QXmlEditMimeDataFormat);
         QString key = QString::fromUtf8(mimeDataArray);
@@ -663,7 +668,7 @@ void QXmlEditData::setClipBoardItem(Element *value, const QString &textualRepres
     QMimeData *mimeData = new QMimeData;
     mimeData->setText(textualRepresentation);
     QString key ;
-    _clipBoardKey = key.sprintf("%p#%p", value, qApp);
+    _clipBoardKey = key = QString::asprintf("%p#%p", value, qApp);
     mimeData->setData(QXmlEditMimeDataFormat, _clipBoardKey.toUtf8());
     QApplication::clipboard()->setMimeData(mimeData);
     _clipBoardItem = value ;

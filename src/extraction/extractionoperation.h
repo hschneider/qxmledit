@@ -35,6 +35,7 @@
 #include "extractresults.h"
 #include "libQXmlEdit_global.h"
 #include "scripting/extractionscriptmanager.h"
+#include "modules/utils/codecdevice.h"
 
 /**************
   TODO:
@@ -52,6 +53,9 @@ public:
     uint currentSubfolderDocument;
     QXmlStreamWriter xmlWriter;
     QTextStream csvWriter;
+    // Qt 6 writers are UTF-8 only: these write the document encoding to the files
+    QScopedPointer<CodecDevice> outputCodecDevice;
+    QScopedPointer<CodecDevice> csvCodecDevice;
     QString currentFolderPath;
     QHash<QString, int> _mapForCSVColumns;
     //--------

@@ -62,7 +62,7 @@ AllowedItemsInsert::AllowedItemsInsert(XElementContent *content, QList<XSchemaOb
         QTreeWidgetItem *uiItem = new QTreeWidgetItem();
         uiItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         uiItem->setText(0, targetContent->item()->name());
-        uiItem->setData(0, Qt::UserRole, qVariantFromValue((void*)targetContent->item()));
+        uiItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)targetContent->item()));
         uiItem->setCheckState(0, Qt::Unchecked);
         //TODO uiItem->setText(1, targetContent->item()->userDescription());
         if(parentItem) {
@@ -119,7 +119,7 @@ void AllowedItemsInsert::addItem(XSingleElementContent *target, QTreeWidgetItem 
     if(NULL != annotation) {
         uiItem->setText(1, annotation->text());
     }
-    uiItem->setData(0, Qt::UserRole, qVariantFromValue((void*)target));
+    uiItem->setData(0, Qt::UserRole, QVariant::fromValue((void*)target));
     uiItem->setCheckState(0, Qt::Unchecked);
 
     if(parentItem) {
@@ -325,20 +325,20 @@ void AllowedItemsInsert::addAttributeItem(QTableWidget *table, AttrCollectInfo* 
         itemMod->setFlags(itemMod->flags() & (~Qt::ItemIsEditable));
         itemMod->setCheckState(Qt::Unchecked);
         itemMod->setFlags(itemMod->flags() | (Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable));
-        itemMod->setData(Qt::UserRole, qVariantFromValue((void*)info));
+        itemMod->setData(Qt::UserRole, QVariant::fromValue((void*)info));
         table->setItem(rows, 0, itemMod);
     }
     {
         Utils::TODO_NEXT_RELEASE("anche tipo");
         QTableWidgetItem *itemName = new QTableWidgetItem(name);
         itemName->setFlags(itemName ->flags() & ~(Qt::ItemIsEditable));
-        itemName->setData(Qt::UserRole, qVariantFromValue((void*)info));
+        itemName->setData(Qt::UserRole, QVariant::fromValue((void*)info));
         table->setItem(rows, 1, itemName);
     }
     {
         QTableWidgetItem *itemValue = new QTableWidgetItem(value);
         itemValue->setFlags(itemValue->flags() & ~(Qt::ItemIsUserCheckable));
-        itemValue->setData(Qt::UserRole, qVariantFromValue((void*)info));
+        itemValue->setData(Qt::UserRole, QVariant::fromValue((void*)info));
         table->setItem(rows, 2, itemValue);
     }
 

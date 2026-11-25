@@ -129,19 +129,19 @@ bool TestXmlUtils::checkIs(const QChar &ch, const bool expectedResult)
 bool TestXmlUtils::testParsing()
 {
     _testName = "testUnits/testParsing";
-    if(!checkIs(0x20, true) ) {
+    if(!checkIs(QChar(0x20), true) ) {
         return false ;
     }
-    if(!checkIs(0x09, true) ) {
+    if(!checkIs(QChar(0x09), true) ) {
         return false ;
     }
-    if(!checkIs(0x0D, true) ) {
+    if(!checkIs(QChar(0x0D), true) ) {
         return false ;
     }
-    if(!checkIs(0x0A, true) ) {
+    if(!checkIs(QChar(0x0A), true) ) {
         return false ;
     }
-    if(!checkIs(0x21, false) ) {
+    if(!checkIs(QChar(0x21), false) ) {
         return false ;
     }
     if(!checkIs('a', false) ) {

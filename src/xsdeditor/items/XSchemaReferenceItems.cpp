@@ -34,7 +34,7 @@ IncludeItem::IncludeItem(XsdGraphicContext *newContext, XSchemaObject *newItem, 
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -208,7 +208,7 @@ RedefineItem::RedefineItem(XsdGraphicContext *newContext, XSchemaObject *newItem
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -381,7 +381,7 @@ ImportItem::ImportItem(XsdGraphicContext *newContext, XSchemaObject *newItem, QG
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }

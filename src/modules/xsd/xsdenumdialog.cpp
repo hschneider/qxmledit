@@ -101,7 +101,7 @@ QTableWidgetItem *XSDEnumDialog::createItem(XSDFacet *facet, const QString &text
 {
     QTableWidgetItem *item = new QTableWidgetItem(text);
     item->setFlags(item->flags() & (~Qt::ItemIsEditable));
-    item->setData(Qt::UserRole, qVariantFromValue((void*)facet));
+    item->setData(Qt::UserRole, QVariant::fromValue((void*)facet));
     return item;
 }
 
@@ -122,7 +122,7 @@ void XSDEnumDialog::setRow(XSDFacet * facet, const int row, const bool isModifie
 {
     QTableWidgetItem *itemModified = createItem(facet, isModified ? "*" : " ");
     if(isModified) {
-        itemModified->setBackgroundColor(QColor(Qt::red));
+        itemModified->setBackground(QColor(Qt::red));
     }
     itemModified->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QTableWidgetItem *itemType = createItem(facet, facet->typeString());

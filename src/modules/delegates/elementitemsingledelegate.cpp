@@ -141,7 +141,7 @@ void ElementItemSingleDelegate::calcTextColor(const QStyleOptionViewItem & optio
     }
 
     QPalette palette = option.palette;
-    QColor backgroundColor = palette.color(QPalette::Normal, QPalette::Background);
+    QColor backgroundColor = palette.color(QPalette::Normal, QPalette::Window);
     QColor textColor = palette.color(QPalette::Normal, QPalette::Text);
     QColor hiTextColor = palette.color(QPalette::Normal, QPalette::HighlightedText);
 
@@ -389,7 +389,7 @@ void ElementItemSingleDelegate::paint(QPainter * painter, const QStyleOptionView
             metrics = &VStyle::defaultFontMetrics();
         }
         QRect rect(option.rect);
-        int textWidth = metrics->width(dataInfo._tagInfo);
+        int textWidth = metrics->horizontalAdvance(dataInfo._tagInfo);
         if(isReverse) {
             rect.setLeft(currentPosX - textWidth - textWidth / 10);
             rect.setWidth(textWidth + textWidth / 10);
@@ -416,7 +416,7 @@ void ElementItemSingleDelegate::paint(QPainter * painter, const QStyleOptionView
         }
         painter->drawText(rect, dataInfo._tagInfo, option.displayAlignment);
         currentPosX += (textWidth + HGap) * sign ;
-        currentPosX += (4 * metrics->width(" ")) * sign;
+        currentPosX += (4 * metrics->horizontalAdvance(" ")) * sign;
         painter->setFont(oldFont);
         painter->setPen(oldPen);
         painter->setBackground(backBrush);
@@ -428,7 +428,7 @@ void ElementItemSingleDelegate::paint(QPainter * painter, const QStyleOptionView
     painter->setPen(defaultTextColor);
     if(!dataInfo._childrenSizeInfo.isEmpty()) {
         QRect rect(option.rect);
-        int textWidth = painter->fontMetrics().width(dataInfo._childrenSizeInfo);
+        int textWidth = painter->fontMetrics().horizontalAdvance(dataInfo._childrenSizeInfo);
         if(isReverse) {
             rect.setLeft(currentPosX - textWidth - 10);
             rect.setWidth(textWidth + 10);
@@ -506,7 +506,7 @@ void ElementItemSingleDelegate::paint(QPainter * painter, const QStyleOptionView
             Utils::TODO_NEXT_RELEASE("reverse text");
 
             if(isReverse) {
-                int textWidth = painter->fontMetrics().width(dataInfo._inlineTextInfo);
+                int textWidth = painter->fontMetrics().horizontalAdvance(dataInfo._inlineTextInfo);
                 rect.setLeft(currentPosX - textWidth - 10);
                 rect.setWidth(textWidth + 10);
             } else {
@@ -579,7 +579,7 @@ QSize ElementItemSingleDelegate::sizeHint(const QStyleOptionViewItem & option, c
                 fontMetrics = &VStyle::defaultFontMetrics();
             }
         }
-        int textWidth = fontMetrics->width(dataInfo._tagInfo);
+        int textWidth = fontMetrics->horizontalAdvance(dataInfo._tagInfo);
         currentPosX += textWidth + HGap ;
     }
 
@@ -661,7 +661,7 @@ void ElementItemSingleDelegate::findRects(QTreeWidget * widget, QTreeWidgetItem 
             metrics = &VStyle::defaultFontMetrics();
         }
         QRect rect(option.rect);
-        int textWidth = metrics->width(dataInfo._tagInfo);
+        int textWidth = metrics->horizontalAdvance(dataInfo._tagInfo);
         if(isReverse) {
             rect.setLeft(currentPosX - textWidth - textWidth / 10);
             rect.setWidth(textWidth + textWidth / 10);
@@ -671,7 +671,7 @@ void ElementItemSingleDelegate::findRects(QTreeWidget * widget, QTreeWidgetItem 
         }
 
         currentPosX += (textWidth + HGap) * sign ;
-        currentPosX += (4 * metrics->width(" ")) * sign;
+        currentPosX += (4 * metrics->horizontalAdvance(" ")) * sign;
 
         if(NULL != elementDisplayInfo) {
             elementDisplayInfo->_tagRect.setRect(rect.left(), rect.top(), rect.width(), rect.height());
@@ -682,7 +682,7 @@ void ElementItemSingleDelegate::findRects(QTreeWidget * widget, QTreeWidgetItem 
     // background already painted in the default method.
     if(!dataInfo._childrenSizeInfo.isEmpty()) {
         QRect rect(option.rect);
-        int textWidth = option.fontMetrics.width(dataInfo._childrenSizeInfo);
+        int textWidth = option.fontMetrics.horizontalAdvance(dataInfo._childrenSizeInfo);
         if(isReverse) {
             rect.setLeft(currentPosX - textWidth - 10);
             rect.setWidth(textWidth + 10);
@@ -738,7 +738,7 @@ void ElementItemSingleDelegate::findRects(QTreeWidget * widget, QTreeWidgetItem 
             Utils::TODO_NEXT_RELEASE("reverse text");
 
             if(isReverse) {
-                int textWidth = option.fontMetrics.width(dataInfo._inlineTextInfo);
+                int textWidth = option.fontMetrics.horizontalAdvance(dataInfo._inlineTextInfo);
                 rect.setLeft(currentPosX - textWidth - 10);
                 rect.setWidth(textWidth + 10);
             } else {

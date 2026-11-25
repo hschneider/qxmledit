@@ -418,7 +418,7 @@ void SQLLiteDataAccess::Private::setError()
     QSqlError error = _db.lastError();
     _errorCode = E_UNKNOWN;
     _dbErrorText = error.text() ;
-    _dbErrorCode = error.number() ;
+    _dbErrorCode = error.nativeErrorCode().toInt() ;
     if(_logger) {
         _logger->error(QString("error %1").arg(_dbErrorText), &_logInfo);
     }
@@ -1596,7 +1596,7 @@ bool SQLLiteDataAccess::Private::deleteSessionDataInternalDate(const SessionData
         return false;
     }
     if(_logger) {
-        _logger->info(QString("deleteSessionDataInternalDate: date is %1").arg(limitDate.toString(Qt::DefaultLocaleShortDate)), &_logInfo);
+        _logger->info(QString("deleteSessionDataInternalDate: date is %1").arg(QLocale().toString(limitDate, QLocale::ShortFormat)), &_logInfo);
     }
 
     {

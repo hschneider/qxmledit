@@ -62,9 +62,9 @@ void LineEditWithCompleter::setData(QSet<QString> *newData)
 {
     QStringList newList;
     if(NULL != newData) {
-        newList = newData->toList();
+        newList = newData->values();
         // do a sort
-        qSort(newList.begin(), newList.end(), Utils::caseInsensitiveLessThanCompareFunction);
+        std::sort(newList.begin(), newList.end(), Utils::caseInsensitiveLessThanCompareFunction);
     }
     _namesModel.setStringList(newList);
 }
@@ -72,9 +72,9 @@ void LineEditWithCompleter::setData(QSet<QString> *newData)
 void LineEditWithCompleter::setData(QSet<QString> newData)
 {
     QStringList newList;
-    newList = newData.toList();
+    newList = newData.values();
     // do a sort
-    qSort(newList.begin(), newList.end(), Utils::caseInsensitiveLessThanCompareFunction);
+    std::sort(newList.begin(), newList.end(), Utils::caseInsensitiveLessThanCompareFunction);
     _namesModel.setStringList(newList);
 }
 

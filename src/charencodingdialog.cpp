@@ -140,7 +140,7 @@ void CharEncodingDialog::initCharDetails()
         QFont font;
         font.setFamily(family);
         font.setStyle(style);
-        font.setWeight(weight);
+        font.setWeight(QFont::Weight(weight));
         font.setPointSizeF(ptSize);
         _charFont = font ;
     }
@@ -151,7 +151,7 @@ void CharEncodingDialog::initCharDetails()
 void CharEncodingDialog::saveConfiguration()
 {
     // gets the codec names
-    QStringList usedEncodings = _usedEncodingNames.toList();
+    QStringList usedEncodings = _usedEncodingNames.values();
     Config::saveStringArray(AppConfig::KEY_ENCODING_USEDCODECS, usedEncodings);
 }
 
@@ -389,16 +389,11 @@ QByteArray CharEncodingDialog::doGrid(QTableWidget *grid, QTextCodec *codec, QBy
         if(isFirst) {
             translated = src ;
         } else {
-            QTextStream inputBuffer(source, QIODevice::ReadOnly);
-            inputBuffer.setCodec(codec);
-            translated = inputBuffer.readAll();
+            translated = codec->toUnicode(source);
         }
 
-        QByteArray outArray;
-        QTextStream outputStream(&outArray, QIODevice::WriteOnly);
-        outputStream.setCodec(codec);
-        outputStream << translated ;
-        outputStream.flush();
+        QTextEncoder encoder(codec, QTextCodec::IgnoreHeader);
+        QByteArray outArray = encoder.fromUnicode(translated);
 
         insertChainEncodedRow(grid, codec, outArray, translated);
         grid->resizeColumnsToContents();
@@ -462,7 +457,7 @@ void CharEncodingDialog::on_numericEdit_textChanged()
     }
     QString entry = ui->numericEdit->text();
     entry = entry.replace(",", " ");
-    QStringList entries = entry.split(" ", QString::SkipEmptyParts);
+    QStringList entries = entry.split(" ", Qt::SkipEmptyParts);
     QByteArray binaryData;
     foreach(QString anEntry, entries) {
         bool ok = false ;
@@ -549,7 +544,7 @@ void CharEncodingDialog::characterSelect()
             // find the character by the value
             QString entry = ui->charEncodingValue->text().trimmed();
             entry = entry.replace(",", " ");
-            QStringList entries = entry.split(" ", QString::SkipEmptyParts);
+            QStringList entries = entry.split(" ", Qt::SkipEmptyParts);
             QByteArray binaryData;
             foreach(QString anEntry, entries) {
                 bool ok = false ;
@@ -1020,7 +1015,7 @@ void CharEncodingDialog::exportToJavaUnicodeChars(const QString &src)
         QChar ch = inputData.at(i);
 
         ushort unicodeCode = ch.unicode();
-        if(ch > 127) {
+        if(ch.unicode() > 127) {
             str += "\\u";
             QString value = Utils::fmtNumber(true, unicodeCode, 4, false);
             str += value;

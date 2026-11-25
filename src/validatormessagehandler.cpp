@@ -23,9 +23,8 @@
 #include "validatormessagehandler.h"
 #include "utils.h"
 
-#ifndef USE_QT_44
-
-ValidatorMessageHandler::ValidatorMessageHandler() : QAbstractMessageHandler(NULL)
+ValidatorMessageHandler::ValidatorMessageHandler() :
+    _hasMessage(false), _type(QtDebugMsg), _line(0), _column(0)
 {
 }
 
@@ -33,18 +32,21 @@ ValidatorMessageHandler::~ValidatorMessageHandler()
 {
 }
 
-
-void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const QSourceLocation & sourceLocation)
+// Only the first message is kept: it is the one that locates the error.
+void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString & description, const QUrl & identifier, const int line, const int column)
 {
+    if(_hasMessage) {
+        return ;
+    }
+    _hasMessage = true ;
     _type = type ;
     _description = description;
     _identifier = identifier ;
-    _sourceLocation = sourceLocation ;
+    _line = line ;
+    _column = column ;
 }
 
 QString ValidatorMessageHandler::descriptionInPlainText()
 {
     return Utils::convertHtmlToPlainText(_description);
 }
-
-#endif

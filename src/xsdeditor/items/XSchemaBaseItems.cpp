@@ -1023,7 +1023,7 @@ void RChildren::deleteAt(const int &position)
 
 RootItem::RootItem(XsdGraphicContext *newContext, XSDSchema *newSchema, QGraphicsItem *parent) : XSDItem(newContext), _graphicsItem(new PolygonItem(this, false)), _item(NULL)
 {
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     if(NULL != parent) {
         newContext->scene()->addItem(_graphicsItem);
     }
@@ -1269,7 +1269,7 @@ ContainerItem::ContainerItem(XsdGraphicContext *newContext, XSchemaContainer *ne
     _topOffsetForLabel = 0 ;
     _marginBottom = 10 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -1525,7 +1525,7 @@ ElementItem::ElementItem(XsdGraphicContext *newContext, XSchemaElement *newItem,
 {
     newContext->scene()->addItem(_graphicsItem);
     _graphicsItem->setToolTip("TEST TOOLTIP");
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -1913,7 +1913,7 @@ AttributeItem::AttributeItem(XsdGraphicContext *newContext, XSchemaAttribute *ne
       _item(NULL), _graphics(new GraphicsRoundRectItem(this)), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphics);
-    _graphics->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphics->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init();
     setItem(newItem);
 }
@@ -2063,7 +2063,7 @@ GenericItem::GenericItem(XsdGraphicContext *newContext, XSchemaObject *newItem, 
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -2249,7 +2249,7 @@ AllItem::AllItem(XsdGraphicContext *newContext, XSchemaAll *newItem, QGraphicsIt
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -2405,7 +2405,7 @@ DerivationItem::DerivationItem(XsdGraphicContext *newContext, XSchemaObject *new
       _icon(NULL), _textItem(NULL), _iconLink(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }

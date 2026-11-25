@@ -252,7 +252,7 @@ void CodePageDialog::search()
 {
     bool existsResult = false;
     int index = 0 ;
-    QChar chSel = 0;
+    QChar chSel(0);
     if(ui->radioSearchChar->isChecked()) {
         QString res = ui->searchChar->text().trimmed();
         if(!res.isEmpty()) {

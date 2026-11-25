@@ -35,7 +35,7 @@ RestrictionItem::RestrictionItem(XsdGraphicContext *newContext, XSchemaObject *n
 {
     _isDiff = false;
     parent->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -199,7 +199,7 @@ UnionItem::UnionItem(XsdGraphicContext *newContext, XSchemaSimpleTypeUnion *newI
 {
     _isDiff = false;
     parent->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -333,7 +333,7 @@ ListItem::ListItem(XsdGraphicContext *newContext, XSchemaSimpleTypeList *newItem
 {
     _isDiff = false;
     parent->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }

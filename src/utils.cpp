@@ -27,6 +27,7 @@
 #include "regola.h"
 #include "utils.h"
 #include "qxmleditconfig.h"
+#include "modules/utils/codecdevice.h"
 
 #define BATCH_ON_NOZERO    (0x55)
 
@@ -369,7 +370,7 @@ QStringList Utils::readUTF8FileStringList(const QString &filePath, bool& error)
     }
 
     QTextStream inStream(&file);
-    inStream.setCodec(QTextCodec::codecForName("UTF-8"));
+    inStream.setEncoding(QStringConverter::Utf8);
     while(!inStream.atEnd()) {
         QString line = inStream.readLine();
         result.append(line);
@@ -392,7 +393,7 @@ QString Utils::readUTF8FileString(const QString &filePath, bool& error)
     }
 
     QTextStream inStream(&file);
-    inStream.setCodec(QTextCodec::codecForName("UTF-8"));
+    inStream.setEncoding(QStringConverter::Utf8);
     while(!inStream.atEnd()) {
         QString line = inStream.readLine();
         result.append(line);
@@ -419,7 +420,7 @@ bool Utils::writeXDocumentToFile(QDomDocument &document, const QString &filePath
         return false ;
     }
     QTextStream streamOut(&file);
-    streamOut.setCodec("UTF-8");
+    streamOut.setEncoding(QStringConverter::Utf8);
     streamOut << document.toString(4);
     streamOut.flush();
     file.close();
@@ -1045,16 +1046,12 @@ QString Utils::normalizeFilePath(const QString &inputPath)
 
 QByteArray Utils::translateData(const QString &string, const QByteArray &encoding)
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::ReadWrite);
-    QTextStream stream(&buffer);
-    stream.setCodec(QTextCodec::codecForName(encoding));
-    stream.setGenerateByteOrderMark(false);
-    stream << string ;
-    stream.flush();
-    buffer.close();
-    QByteArray data = buffer.data();
-    return data ;
+    QTextCodec *codec = QTextCodec::codecForName(encoding);
+    if(NULL == codec) {
+        return string.toUtf8();
+    }
+    QTextEncoder encoder(codec, QTextCodec::IgnoreHeader);
+    return encoder.fromUnicode(string);
 }
 
 bool Utils::isAsciiCompatible(const QByteArray &encoding)
@@ -1081,8 +1078,9 @@ bool Utils::is8BitEncodingHonoredForStreamWriter(const QString &encoding)
     bool result = true;
     QBuffer ioDevice;
     if(ioDevice.open(QIODevice::WriteOnly)) {
-        QXmlStreamWriter outputStream(&ioDevice);
-        outputStream.setCodec(encoding.toLatin1().data());
+        CodecDevice codecDevice(&ioDevice, QTextCodec::codecForName(encoding.toLatin1()));
+        codecDevice.open(QIODevice::WriteOnly);
+        QXmlStreamWriter outputStream(&codecDevice);
         ioDevice.setTextModeEnabled(false);
         outputStream.writeStartDocument();
         outputStream.writeStartElement("root");
@@ -1232,8 +1230,9 @@ bool Utils::writeStringToFile(QFile *dataFile, const QString &dataString, const 
     bool ok = false ;
     if(dataFile->open(QFile::WriteOnly)) {
         ok = true ;
-        QTextStream streamOut(dataFile);
-        streamOut.setCodec(QTextCodec::codecForName(encoding.toLatin1().data()));
+        CodecDevice codecDevice(dataFile, QTextCodec::codecForName(encoding.toLatin1()));
+        codecDevice.open(QIODevice::WriteOnly);
+        QTextStream streamOut(&codecDevice);
         streamOut << dataString ;
         streamOut.flush();
         if(dataFile->error() != QFile::NoError) {

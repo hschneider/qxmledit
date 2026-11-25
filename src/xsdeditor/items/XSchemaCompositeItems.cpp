@@ -36,7 +36,7 @@ ChoiceItem::ChoiceItem(XsdGraphicContext *newContext, XSchemaChoice *newItem, QG
 {
     _extraSpace = 0;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -181,7 +181,7 @@ SequenceItem::SequenceItem(XsdGraphicContext *newContext, XSchemaSequence *newIt
 {
     _extraSpace = 0 ;
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -321,7 +321,7 @@ GroupItem::GroupItem(XsdGraphicContext *newContext, XSchemaObject *newItem, QGra
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }
@@ -480,7 +480,7 @@ AttributeGroupItem::AttributeGroupItem(XsdGraphicContext *newContext, XSchemaObj
       _icon(NULL), _textItem(NULL)
 {
     newContext->scene()->addItem(_graphicsItem);
-    _graphicsItem->setData(XSD_ITEM_DATA, qVariantFromValue((void*)this));
+    _graphicsItem->setData(XSD_ITEM_DATA, QVariant::fromValue((void*)this));
     init(newContext);
     setItem(newItem);
 }

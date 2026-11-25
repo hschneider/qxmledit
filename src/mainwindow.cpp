@@ -1783,7 +1783,7 @@ void MainWindow::on_actionZoomOut_triggered()
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
     if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
-        int numDegrees = event->delta() / 8;
+        int numDegrees = event->angleDelta().y() / 8;
         if(numDegrees > 10) {
             on_actionZoomIn_triggered();
         } else if(numDegrees < -10) {

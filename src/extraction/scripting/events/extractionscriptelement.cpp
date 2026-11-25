@@ -205,7 +205,7 @@ static bool sortLessThanByNsAndNameFunction(const ExtractionScriptAttribute *att
 void ExtractionScriptElementEvent::sortAttributesByName()
 {
     checkInternalState();
-    qSort(_attributesSorted.begin(), _attributesSorted.end(), sortLessThanByNameFunction);
+    std::sort(_attributesSorted.begin(), _attributesSorted.end(), sortLessThanByNameFunction);
     _isModified = true ;
     checkInternalState();
 }
@@ -213,7 +213,7 @@ void ExtractionScriptElementEvent::sortAttributesByName()
 void ExtractionScriptElementEvent::sortAttributesByNamespaceAndName()
 {
     checkInternalState();
-    qSort(_attributesSorted.begin(), _attributesSorted.end(), sortLessThanByNsAndNameFunction);
+    std::sort(_attributesSorted.begin(), _attributesSorted.end(), sortLessThanByNsAndNameFunction);
     _isModified = true ;
     checkInternalState();
 }

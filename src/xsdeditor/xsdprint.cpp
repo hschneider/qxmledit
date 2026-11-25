@@ -117,8 +117,8 @@ void XSDPrint::printPDFToFileInternal(const QString &filePath, const bool isSimp
     QRectF pageNumberArea;
     calculatePageRect(&painter, pageNumberArea);
     // width of a printer page in mm
-    QRectF pageRectWithoutFooter = printer.pageRect();
-    QRectF pageRectInDevicePoints = printer.pageRect();
+    QRectF pageRectWithoutFooter = printer.pageRect(QPrinter::DevicePixel);
+    QRectF pageRectInDevicePoints = printer.pageRect(QPrinter::DevicePixel);
     const double footerHeight = pageNumberArea.height();
 
     // take out page position

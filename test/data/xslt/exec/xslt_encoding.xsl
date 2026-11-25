@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="1.0"
+                exclude-result-prefixes="local xs"
                 xml:lang="en"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:local="http://www.w3.org/2005/xquery-local-functions"
@@ -17,7 +18,7 @@
 	</xsl:template>
     <xsl:template match="a">
         <x>
-            <xsl:attribute name="x" select="@aa" />
+            <xsl:attribute name="x"><xsl:value-of select="@aa"/></xsl:attribute>
         </x>
     </xsl:template>
 

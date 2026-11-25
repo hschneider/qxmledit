@@ -174,7 +174,7 @@ public:
     static QByteArray translateData(const QString &string, const QByteArray &encoding);
     static bool is8BitEncodingHonoredForStreamWriter(const QString &encoding);
     //
-    static void replaceWidget(QLayout *layout, QWidget *oldWidget, QWidget *newWidget, const bool setAlignment = false, const Qt::Alignment alignment = 0, const bool preferredSize = false);
+    static void replaceWidget(QLayout *layout, QWidget *oldWidget, QWidget *newWidget, const bool setAlignment = false, const Qt::Alignment alignment = Qt::Alignment(), const bool preferredSize = false);
     static bool askYNRemapNamespaces(QWidget *parent);
     static bool isRFC4288(const QString &name);
     static bool isRegNameRFC4288(const QString &name);

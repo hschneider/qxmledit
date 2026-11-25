@@ -278,7 +278,7 @@ bool TestAnonymize::cfrMem(QBuffer *resultData, const QString &step, const QStri
 //--------------------------------------------------
 bool TestAnonymize::testAlgCodeVariableLen(const int len, const QString &fileStart, const QString &fileEnd)
 {
-    _testName = QString("testAlgCodeVariableLen").append(len);
+    _testName = QString("testAlgCodeVariableLen").append(QChar(len));
 
     AnonFixedProducer *producer = new AnonFixedProducer();
     AnonCodeAlg anonCodeAlg( false, producer);

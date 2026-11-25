@@ -87,15 +87,15 @@ void InfoDialog::setFileInfo()
         fileInfo.refresh();
         QString filePath = fileInfo.absoluteFilePath();
         bool isWritable = fileInfo.isWritable();
-        QDateTime creationTime = fileInfo.created();
+        QDateTime creationTime = fileInfo.birthTime();
         QDateTime lastModTime = fileInfo.lastModified();
         QString owner = fileInfo.owner();
         qint64 size = fileInfo.size();
 
         QString info1 = Utils::escapeHTML(tr("Path: %1").arg(filePath));
         QString info2 = Utils::escapeHTML(tr("Size: %1 (%2 bytes) %3").arg(Utils::getSizeForPresentation(size)).arg(size).arg((isWritable ? tr("writable") : "")));
-        QString info3 = Utils::escapeHTML(tr("Created on: %1 by %2").arg(creationTime.toString(Qt::DefaultLocaleLongDate)).arg(owner));
-        QString info4 = Utils::escapeHTML(tr("Last modified on: %1").arg(lastModTime.toString(Qt::DefaultLocaleLongDate)));
+        QString info3 = Utils::escapeHTML(tr("Created on: %1 by %2").arg(QLocale().toString(creationTime, QLocale::LongFormat)).arg(owner));
+        QString info4 = Utils::escapeHTML(tr("Last modified on: %1").arg(QLocale().toString(lastModTime, QLocale::LongFormat)));
 
         QString info = QString("<html><body>%1<br/>%2<br/>%3<br/>%4<br/></body></html>").arg(info1).arg(info2).arg(info3).arg(info4);
 

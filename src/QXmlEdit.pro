@@ -61,14 +61,9 @@ isEqual(ENABLE_SCXML, "Y") {
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 win32 {
-    QT += winextras
     DEFINES += "_NO_W32_PSEUDO_MODIFIERS"
     DEFINES += "NOGDI"
 }
-}
-
-macx: {
-    QT       += macextras
 }
 
 equals(TARGET_NAME_UNIXSTYLE, "1") {
@@ -391,7 +386,8 @@ INCLUDEPATH += globals/includes
 
 QT += xml svg network sql
 #QT += declarative
-QT += xmlpatterns
+QT += core5compat
+include(libxml.pri)
 
 # object files
 OBJECTS_DIR = ../build/app/obj

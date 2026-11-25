@@ -91,7 +91,7 @@ void ExtractionScriptFilter::reset()
 
 QList<ExtractionScriptEventHandler*> ExtractionScriptFilter::allEvents()
 {
-    return _eventsSet.toList();
+    return _eventsSet.values();
 }
 
 int ExtractionScriptFilter::eventsCount()

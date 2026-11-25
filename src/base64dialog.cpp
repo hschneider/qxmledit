@@ -84,12 +84,14 @@ void Base64Dialog::base64textChanged()
     QString base64Text = ui->base64Edit->toPlainText();
     Base64Utils base64;
     QByteArray array2 = base64.fromBase64(_type, base64Text);
-    QTextStream textStream(array2);
-    textStream.setAutoDetectUnicode(false);
+    QString result;
     if(NULL != _currentCodec) {
-        textStream.setCodec(_currentCodec);
+        result = _currentCodec->toUnicode(array2);
+    } else {
+        QTextStream textStream(array2);
+        textStream.setAutoDetectUnicode(false);
+        result = textStream.readAll();
     }
-    QString result = textStream.readAll();
     ui->textEdit->setPlainText(result);
     _isConverting = false ;
 }

@@ -43,7 +43,7 @@ SessionDetailDialog::SessionDetailDialog(QWidget *parent, UIDelegate *uiDelegate
     ui->details->setNewModel(_model);
     ui->name->setText(_model->name);
     ui->description->setPlainText(_model->description);
-    ui->lastAccess->setText(_model->lastAccess.toString(Qt::DefaultLocaleShortDate));
+    ui->lastAccess->setText(QLocale().toString(_model->lastAccess, QLocale::ShortFormat));
 
     connect(ui->details, SIGNAL(fileSelected(FileModel*)), this, SLOT(onFileSelected(FileModel*)));
     connect(ui->details, SIGNAL(fileDoubleClicked(FileModel*)), this, SLOT(onFileDoubleClicked(FileModel*)));

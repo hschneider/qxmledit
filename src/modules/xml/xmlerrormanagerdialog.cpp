@@ -3,6 +3,7 @@
 #include "modules/xml/xmlloadcontext.h"
 #include <QDesktopServices>
 #include "utils.h"
+#include "modules/utils/codecdevice.h"
 
 XMLErrorManagerDialog::XMLErrorManagerDialog(QWidget *parent, XMLLoadContext *newContext, QXmlStreamReader *xmlReader) :
     QDialog(parent),
@@ -92,8 +93,9 @@ bool XMLErrorManagerDialog::readData(QIODevice *device)
     if(!device->seek(0)) {
         return false ;
     }
-    QTextStream stream(device);
-    stream.setCodec(QTextCodec::codecForName(_context->encoding().toLatin1().data()));
+    CodecDevice codecDevice(device, QTextCodec::codecForName(_context->encoding().toLatin1()));
+    codecDevice.open(QIODevice::ReadOnly);
+    QTextStream stream(&codecDevice);
     return readData(&stream, _context->characterOffset());
 }
 

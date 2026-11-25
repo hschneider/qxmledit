@@ -41,7 +41,7 @@ ExtractionFrontEnd::ExtractionFrontEnd(ExtractionOperation *operation, QWidget *
     setPBIndeterminate();
     _running = true ;
     _uiServices.startIconProgressBar();
-    _future = QtConcurrent::run(this, &ExtractionFrontEnd::extractFragmentsWorkThread);
+    _future = QtConcurrent::run(&ExtractionFrontEnd::extractFragmentsWorkThread, this);
     QTimer::singleShot(200, this, SLOT(checkIfDone()));
 
     // setup values

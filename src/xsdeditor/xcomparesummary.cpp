@@ -93,16 +93,16 @@ void XCompareSummary::loadList(const QString & title, const QList<XSchemaObject*
     QStringList titleList;
     titleList.append(title);
     QTreeWidgetItem *itemTitle = new QTreeWidgetItem(titleList);
-    itemTitle->setData(0, Qt::UserRole, qVariantFromValue((void*)NULL));
+    itemTitle->setData(0, Qt::UserRole, QVariant::fromValue((void*)NULL));
     ui->treeWidget->addTopLevelItem(itemTitle);
-    ui->treeWidget->setFirstItemColumnSpanned(itemTitle, true);
-    itemTitle->setBackgroundColor(0, bkColor);
+    itemTitle->setFirstColumnSpanned(true);
+    itemTitle->setBackground(0, bkColor);
     foreach(XSchemaObject * item, items) {
         QTreeWidgetItem *itemElement = new QTreeWidgetItem(itemTitle);
         itemElement->setText(0, item->tagName());
         itemElement->setText(1, item->name());
         itemElement->setText(2, item->id());
-        itemElement->setData(0, Qt::UserRole, qVariantFromValue((void*)item));
+        itemElement->setData(0, Qt::UserRole, QVariant::fromValue((void*)item));
         itemTitle->addChild(itemElement);
     }
 }

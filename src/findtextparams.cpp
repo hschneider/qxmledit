@@ -63,7 +63,7 @@ void FindTextParams::init(const EFindType findType, const QString &textToFind, c
     mIsSearchAttribute = false;
     mIsScoped = false ;
     mOccurrences = 0 ;
-    mScopes = scope.split(SPLIT_SCOPE_CHAR, QString::KeepEmptyParts);
+    mScopes = scope.split(SPLIT_SCOPE_CHAR, Qt::KeepEmptyParts);
     int scopeCount = mScopes.count();
     if((scopeCount > 0) && mScopes.at(scopeCount - 1).startsWith(ATTR_CHAR)) {
         mIsSearchAttribute = true ;
@@ -305,7 +305,7 @@ void FindTextParams::setScope(const EFindTarget scope)
 
 void FindTextParams::setScopePath(const QString &scopePath)
 {
-    mScopes = scopePath.split(SPLIT_SCOPE_CHAR, QString::KeepEmptyParts);
+    mScopes = scopePath.split(SPLIT_SCOPE_CHAR, Qt::KeepEmptyParts);
     int scopeCount = mScopes.count();
     if((scopeCount > 0) && mScopes.at(scopeCount - 1).startsWith(ATTR_CHAR)) {
         mIsSearchAttribute = true ;

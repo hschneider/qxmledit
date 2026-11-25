@@ -163,7 +163,7 @@ bool Snippet::save(const QString &filePath)
         return false;
     }
     QTextStream streamOut(&file);
-    streamOut.setCodec("UTF-8");
+    streamOut.setEncoding(QStringConverter::Utf8);
     streamOut << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
     streamOut << document.toString(4);
     streamOut.flush();

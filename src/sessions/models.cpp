@@ -78,7 +78,7 @@ QVariant SessionFilesDataModel::data(const QModelIndex &index, int role) const
             }
         }
     } else if(role == Qt::UserRole) {
-        return qVariantFromValue((void*)_model->files.at(index.row()));
+        return QVariant::fromValue((void*)_model->files.at(index.row()));
     }
     return QVariant();
 }
@@ -132,13 +132,13 @@ QVariant SessionAccessDataModel::data(const QModelIndex &index, int role) const
             case 0:
                 return access->fileModel->path;
             case 1: {
-                QString sAccess = access->accessDate.toString(Qt::DefaultLocaleShortDate);
+                QString sAccess = QLocale().toString(access->accessDate, QLocale::ShortFormat);
                 return sAccess;
             }
             }
         }
     } else if(role == Qt::UserRole) {
-        return qVariantFromValue((void*)_model->accesses.at(index.row()));
+        return QVariant::fromValue((void*)_model->accesses.at(index.row()));
     }
     return QVariant();
 }

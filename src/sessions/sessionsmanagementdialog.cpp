@@ -105,14 +105,14 @@ void SessionsManagementDialog::readSessionsData()
         addItem(row, 1, model->session.name);
         addItem(row, 2, model->session.description);
         QDateTime dtCreation = model->session.creationDate;
-        QString sCreation = dtCreation.toString(Qt::DefaultLocaleShortDate);
+        QString sCreation = QLocale().toString(dtCreation, QLocale::ShortFormat);
         addItem(row, 3, sCreation);
         QDateTime dtAccess = model->lastAccess;
-        QString sAccess = dtAccess.toString(Qt::DefaultLocaleShortDate);
+        QString sAccess = QLocale().toString(dtAccess, QLocale::ShortFormat);
         addItem(row, 4, sAccess);
         QTableWidgetItem *countItem = addItem(row, 5, QString("%1").arg(model->count));
         countItem->setTextAlignment(Qt::AlignRight | Qt::AlignCenter);
-        item->setData(Qt::UserRole, qVariantFromValue((void*)model));
+        item->setData(Qt::UserRole, QVariant::fromValue((void*)model));
         row++;
     }
     ui->sessionList->resizeColumnsToContents();

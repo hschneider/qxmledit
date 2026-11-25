@@ -38,7 +38,7 @@ XSchemaInfoPool::~XSchemaInfoPool()
 
 QList<XSDSchema*> XSchemaInfoPool::includes()
 {
-    return _includesAndRedefines.toList();
+    return _includesAndRedefines.values();
 }
 
 void XSchemaInfoPool::addInclude(XSDSchema *newInclude)

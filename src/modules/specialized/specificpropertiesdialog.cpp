@@ -71,13 +71,13 @@ void SpecificPropertiesDialog::setupData()
         item->setText(0, handler->name);
         ui->treeWidget->addTopLevelItem(item);
         item->setFlags(item->flags() & (~Qt::ItemIsEditable));
-        item->setData(0, Qt::UserRole, qVariantFromValue((void*)handler));
+        item->setData(0, Qt::UserRole, QVariant::fromValue((void*)handler));
         foreach(SingleHandlerForInsert* singleHanlder, handler->elements) {
             QTreeWidgetItem * subItem = new QTreeWidgetItem();
             QString theName = QString("<%1> %2").arg(singleHanlder->name).arg(singleHanlder->description);
             subItem->setText(0, theName);
             subItem->setFlags(subItem->flags() & (~Qt::ItemIsEditable));
-            subItem->setData(0, Qt::UserRole, qVariantFromValue(singleHanlder->id));
+            subItem->setData(0, Qt::UserRole, QVariant::fromValue(singleHanlder->id));
             item->addChild(subItem);
         }
     }

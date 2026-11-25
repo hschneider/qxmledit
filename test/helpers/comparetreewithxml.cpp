@@ -95,7 +95,7 @@ bool CompareTreeWithXml::compareItem( Element* element, QTreeWidgetItem* item)
     colorE.setNamedColor(colorName);
 
     QString textI = item->text(0);
-    QColor colorI = item->backgroundColor(0);
+    QColor colorI = item->background(0).color();
 
     if( textE != textI ) {
         return false;

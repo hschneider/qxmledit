@@ -29,6 +29,7 @@
 #include "charencodingdialog.h"
 #include "xmlsavecontext.h"
 #include <QByteArray>
+#include "modules/utils/codecdevice.h"
 
 #define DEFAULT_ENCODING    "UTF-8"
 
@@ -1429,11 +1430,8 @@ bool TestEncoding::testFileMode()
     encodings << "UTF-16" << "UTF-16BE" << "UTF-16LE" << "UTF-8" << "UTF-32" << "ISO-8859-15" << "WINDOWS-1252" << "IBM-500" ;
     foreach( const QString &encoding, encodings ) {
         if(NULL != QTextCodec::codecForName(encoding.toLatin1().data())) {
-            QByteArray device;
             XMLSaveContext context;
-            QXmlStreamWriter outputStream(&device);
-            outputStream.setCodec(encoding.toLatin1().data());
-            context.setCodec(outputStream.codec());
+            context.setCodec(QTextCodec::codecForName(encoding.toLatin1().data()));
             const bool isTextMode = context.canUseTextMode();
             bool expectedTextMode = false ;
 #ifdef ENVIRONMENT_WINDOWS
@@ -1522,8 +1520,9 @@ bool TestEncoding::is8BitEncodingHonoredForStreamWriter(const QString &encoding,
     QBuffer ioDevice;
     isError = true ;
     if(ioDevice.open(QIODevice::WriteOnly)) {
-        QXmlStreamWriter outputStream(&ioDevice);
-        outputStream.setCodec(encoding.toLatin1().data());
+        CodecDevice codecDevice(&ioDevice, QTextCodec::codecForName(encoding.toLatin1()));
+        codecDevice.open(QIODevice::WriteOnly);
+        QXmlStreamWriter outputStream(&codecDevice);
         ioDevice.setTextModeEnabled(false);
         outputStream.writeStartDocument();
         outputStream.writeStartElement("root");

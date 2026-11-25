@@ -82,7 +82,7 @@ void XSLTNavigatorWidget::applyNewInfo(XsltHelper *xsltHelper)
     ui->treeNavigator->setUpdatesEnabled(true);
 }
 
-void XSLTNavigatorWidget::loadChildrenItems(const bool isTemplate, QTreeWidgetItem *topItem, QHash<QString, Element*> &data, const QString &typeString)
+void XSLTNavigatorWidget::loadChildrenItems(const bool isTemplate, QTreeWidgetItem *topItem, QMultiHash<QString, Element*> &data, const QString &typeString)
 {
     // sort items
     QMap<QString, QString> sortedMap;
@@ -104,7 +104,7 @@ void XSLTNavigatorWidget::loadChildrenItems(const bool isTemplate, QTreeWidgetIt
             item->setText(0, name);
             item->setToolTip(0, name);
             item->setFlags((item->flags() & ~(Qt::ItemIsEditable | Qt::ItemIsUserCheckable)) | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-            item->setData(0, Qt::UserRole, qVariantFromValue((void*)element));
+            item->setData(0, Qt::UserRole, QVariant::fromValue((void*)element));
             topItem->addChild(item);
         }
     }
@@ -117,13 +117,13 @@ void XSLTNavigatorWidget::loadChildrenItems(const bool isTemplate, QTreeWidgetIt
 
 void XSLTNavigatorWidget::loadTemplates(XsltHelper *xsltHelper, QTreeWidgetItem  *topItem)
 {
-    QHash<QString, Element *> allTemplates = xsltHelper->templateNamesMap();
+    QMultiHash<QString, Element*> allTemplates = xsltHelper->templateNamesMap();
     loadChildrenItems(true, topItem, allTemplates, tr("Templates"));
 }
 
 void XSLTNavigatorWidget::loadFunctions(XsltHelper *xsltHelper, QTreeWidgetItem *topItem)
 {
-    QHash<QString, Element *> allFunctions = xsltHelper->functionNamesMap();
+    QMultiHash<QString, Element*> allFunctions = xsltHelper->functionNamesMap();
     loadChildrenItems(false, topItem, allFunctions, tr("Functions"));
 }
 

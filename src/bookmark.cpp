@@ -66,7 +66,7 @@ void Bookmark::calculateRow()
     if(NULL != element) {
         _row = element->getRow();
     } else {
-        _row = -1 ;
+        _row = QChar(-1) ;
     }
 }
 

@@ -298,7 +298,7 @@ void ExtractionOperation::execute(QFile *file)
                         if(!isExtractAllDocuments()) {
                             if(isExtractCfr()) {
                                 QXmlStreamAttributes streamAttributes = xmlReader.attributes();
-                                QStringRef valueRef = streamAttributes.value(_attributeName);
+                                QStringView valueRef = streamAttributes.value(_attributeName);
                                 QString attributeValue = valueRef.toString();
                                 if(CFR_EQ == _comparisonType) {
                                     if(attributeValue == _comparisonTerm) {
@@ -592,8 +592,9 @@ bool ExtractionOperation::manageOpenCSV(ExtractInfo &info)
         }
         return csvError(info, EXML_OpenWriteError, tr("Unable to open for the CSV file '%1'").arg(info.csvResourcesPath));
     }
-    info.csvWriter.setDevice(&info.csvTempFile);
-    info.csvWriter.setCodec(QTextCodec::codecForName(_documentEncoding.toLatin1().data()));
+    info.csvCodecDevice.reset(new CodecDevice(&info.csvTempFile, QTextCodec::codecForName(_documentEncoding.toLatin1())));
+    info.csvCodecDevice->open(QIODevice::WriteOnly);
+    info.csvWriter.setDevice(info.csvCodecDevice.data());
     // section 4.1.1. of RFC 2046 states explicitly that
     info.crLf = "\r\n" ;
     return true ;
@@ -629,16 +630,17 @@ bool ExtractionOperation::openFile(ExtractInfo &info)
             return false ;
         }
     } else {
-        info.xmlWriter.setCodec(QTextCodec::codecForName(_documentEncoding.toLatin1().data()));
-        info.xmlWriter.setDevice(&info.outputFile);
+        info.outputCodecDevice.reset(new CodecDevice(&info.outputFile, QTextCodec::codecForName(_documentEncoding.toLatin1())));
+        info.outputCodecDevice->open(QIODevice::WriteOnly);
+        info.xmlWriter.setDevice(info.outputCodecDevice.data());
         info.xmlWriter.setAutoFormatting(true);
         if(_isDocumentStandalone) {
-            info.xmlWriter.writeStartDocument(_documentVersion, _isDocumentStandalone);
+            info.outputCodecDevice->writeStartDocument(info.xmlWriter, _documentVersion, _isDocumentStandalone ? 1 : 0);
         } else {
             if(!_documentVersion.isEmpty()) {
-                info.xmlWriter.writeStartDocument(_documentVersion);
+                info.outputCodecDevice->writeStartDocument(info.xmlWriter, _documentVersion);
             } else {
-                info.xmlWriter.writeStartDocument();
+                info.outputCodecDevice->writeStartDocument(info.xmlWriter);
             }
         }
     }
@@ -667,9 +669,10 @@ bool ExtractionOperation::csvError(ExtractInfo &info, const EXMLErrors errorCode
 
 bool ExtractionOperation::writeCSVHeader(ExtractInfo &info)
 {
+    CodecDevice headerDevice(&info.outputFile, QTextCodec::codecForName(_documentEncoding.toLatin1()));
+    headerDevice.open(QIODevice::WriteOnly);
     QTextStream headerStream;
-    headerStream.setDevice(&info.outputFile);
-    headerStream.setCodec(QTextCodec::codecForName(_documentEncoding.toLatin1().data()));
+    headerStream.setDevice(&headerDevice);
 
     QHash<int, QString> columnsForName;
     // insert columns
@@ -1374,7 +1377,7 @@ bool ExtractionOperation::handleExportedElement(ExtractInfo &info, QXmlStreamRea
             columnPositions << position ;
         }
         // sort existing attributes for column
-        qSort(columnPositions);
+        std::sort(columnPositions.begin(), columnPositions.end());
         // write attributes, with empty columns in between.
         int index = 0 ;
         foreach(const int pos, columnPositions) {

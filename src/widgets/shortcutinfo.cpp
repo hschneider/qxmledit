@@ -23,7 +23,7 @@
 #include "shortcutinfo.h"
 #include "ui_shortcutinfo.h"
 #include "widgets/qlabelwithsignals.h"
-#include <QDesktopWidget>
+#include <QScreen>
 #include "qxmleditconfig.h"
 #include "utils.h"
 
@@ -118,7 +118,7 @@ QString ShortcutInfo::readResourceString(const QString &name)
     QFile file(name);
     if(file.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream textStream(&file);
-        textStream.setCodec(QTextCodec::codecForName("UTF-8"));
+        textStream.setEncoding(QStringConverter::Utf8);
         result = textStream.readAll();
         file.close();
     }
@@ -246,7 +246,7 @@ void ShortcutInfo::refreshButtons(const QList<ActionKeyInfo*> &infos)
 
 void ShortcutInfo::doResize(const bool isFirstTime)
 {
-    QRect screenGeometry = QApplication::desktop()->availableGeometry(QApplication::desktop()->screenNumber(this));
+    QRect screenGeometry = screen()->availableGeometry();
     QRect geom = geometry();
     int geomTop = geom.top();
     if(isFirstTime) {
@@ -261,7 +261,7 @@ QList<ActionKeyInfo*> ShortcutInfo::sortActions(const QList<ActionKeyInfo*> &inf
     foreach(ActionKeyInfo *action, infos) {
         result.append(action);
     }
-    qSort(result.begin(), result.end(), ActionKeyInfo::compareOpLessThan);
+    std::sort(result.begin(), result.end(), ActionKeyInfo::compareOpLessThan);
     return result ;
 }
 
