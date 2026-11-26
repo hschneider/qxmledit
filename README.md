@@ -8,7 +8,7 @@ _dist/QXmlEdit-0.9.18.dmg
 Requirements are 
 
 - macOS >= 27.2
-- Apple Silicon >= M1
+- Apple Silicon
 
 I ported the whole thing from QT5 to QT6 with the awesome CLAUDE CLI. Some minor things are broken, for details see the [QT6 Port](#qt-6-port) section below.
 
