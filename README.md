@@ -1,4 +1,4 @@
-## Where is the macOS Installer?
+## Where is the macOS binary?
 
 For the impatient reader - you'll find it here:
 ```
