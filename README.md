@@ -11,7 +11,7 @@ Requirements are
 - Apple Silicon
 
 If your specs are lower, you can still use the original release on Intel or Apple Silicon under Rosetta2:
-https://github.com/lbellonda/qxmledit
+[https://github.com/lbellonda/qxmledit](https://qxmledit.org)
 
 I ported this project from QT5 to QT6 with the awesome CLAUDE CLI. Some minor things have been changed or removed. For details see the [QT6 Port](#qt-6-port) section below.
 
